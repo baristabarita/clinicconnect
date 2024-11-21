@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './appointments.component.html',
-  styleUrl: './appointments.component.css'
+  // styleUrl: './appointments.component.css'
 })
 export class AppointmentsComponent {
 

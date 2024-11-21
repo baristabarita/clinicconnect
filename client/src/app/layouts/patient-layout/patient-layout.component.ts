@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './patient-layout.component.html',
-  styleUrl: './patient-layout.component.css'
+  // styleUrl: './patient-layout.component.css'
 })
 export class PatientLayoutComponent {
 

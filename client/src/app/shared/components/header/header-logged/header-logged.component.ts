@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './header-logged.component.html',
-  styleUrl: './header-logged.component.css'
+  // styleUrl: './header-logged.component.css'
 })
 export class HeaderLoggedComponent {
 

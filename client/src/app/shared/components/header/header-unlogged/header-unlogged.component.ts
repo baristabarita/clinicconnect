@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './header-unlogged.component.html',
-  styleUrl: './header-unlogged.component.css'
+  // styleUrl: './header-unlogged.component.css'
 })
 export class HeaderUnloggedComponent {
 

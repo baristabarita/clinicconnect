@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './public-layout.component.html',
-  styleUrl: './public-layout.component.css'
+  // styleUrl: './public-layout.component.css'
 })
 export class PublicLayoutComponent {
 

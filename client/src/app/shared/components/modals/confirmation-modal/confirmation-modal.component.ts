@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './confirmation-modal.component.html',
-  styleUrl: './confirmation-modal.component.css'
+  // styleUrl: './confirmation-modal.component.css'
 })
 export class ConfirmationModalComponent {
 
