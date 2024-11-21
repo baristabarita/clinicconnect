@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderUnloggedComponent } from './header-unlogged.component';
+import { PatientHeaderComponent } from './patient-header.component';
 
-describe('HeaderUnloggedComponent', () => {
-  let component: HeaderUnloggedComponent;
-  let fixture: ComponentFixture<HeaderUnloggedComponent>;
+describe('PatientHeaderComponent', () => {
+  let component: PatientHeaderComponent;
+  let fixture: ComponentFixture<PatientHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderUnloggedComponent]
+      imports: [PatientHeaderComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HeaderUnloggedComponent);
+    fixture = TestBed.createComponent(PatientHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
