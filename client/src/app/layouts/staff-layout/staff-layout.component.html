@@ -1,1 +1,19 @@
-<p>staff-layout works!</p>
+<div class="flex min-h-screen">
+  <app-sidebar 
+    (sidebarToggled)="onSidebarToggle($event)"
+    class="fixed z-40 h-full"
+  ></app-sidebar>
+  
+  <div 
+    [class]="isCollapsed ? 'ml-16 w-[calc(100%-4rem)]' : 'ml-64 w-[calc(100%-16rem)]'" 
+    class="flex flex-col transition-all duration-300 ease-in-out"
+  >
+    <app-staff-header class="w-full"></app-staff-header>
+    
+    <main class="flex-grow p-4 bg-gray-50">
+      <router-outlet></router-outlet>
+    </main>
+    
+    <app-footer class="w-full"></app-footer>
+  </div>
+</div>
