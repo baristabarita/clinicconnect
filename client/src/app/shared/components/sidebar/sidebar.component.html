@@ -1,1 +1,93 @@
-<p>sidebar works!</p>
+<div 
+      [class]="isCollapsed() ? 'w-16' : 'w-64'" 
+      class="bg-[#1D3557] text-white h-screen fixed left-0 top-0 transition-all duration-300 ease-in-out flex flex-col"
+    >
+      <div class="p-4 flex justify-between items-center">
+        <button 
+          (click)="toggleSidebar()" 
+          class="text-white hover:bg-opacity-75 p-2 rounded"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            class="h-6 w-6" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M4 6h16M4 12h16M4 18h16" 
+            />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="flex-grow px-2 py-4 space-y-2">
+        <a 
+          routerLink="/staff/dashboard"
+          routerLinkActive="bg-[#93CDF6] text-black"
+          class="flex items-center p-2 rounded hover:bg-[#979797] transition duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span 
+            [class]="isCollapsed() ? 'hidden' : 'inline'"
+            class="transition-all duration-300"
+          >
+            Dashboard
+          </span>
+        </a>
+
+        <a 
+          routerLink="/staff/appointments"
+          routerLinkActive="bg-[#93CDF6] text-black"
+          class="flex items-center p-2 rounded hover:bg-[#979797] transition duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span 
+            [class]="isCollapsed() ? 'hidden' : 'inline'"
+            class="transition-all duration-300"
+          >
+            My Appointments
+          </span>
+        </a>
+
+        <a 
+          routerLink="/staff/calendar"
+          routerLinkActive="bg-[#93CDF6] text-black"
+          class="flex items-center p-2 rounded hover:bg-[#979797] transition duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span 
+            [class]="isCollapsed() ? 'hidden' : 'inline'"
+            class="transition-all duration-300"
+          >
+            Calendar
+          </span>
+        </a>
+      </nav>
+
+      <div class="p-2 border-t border-gray-700">
+        <button 
+          (click)="logout()"
+          class="w-full flex items-center p-2 rounded hover:bg-[#979797] transition duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span 
+            [class]="isCollapsed() ? 'hidden' : 'inline'"
+            class="transition-all duration-300"
+          >
+            Logout
+          </span>
+        </button>
+      </div>
+    </div>
