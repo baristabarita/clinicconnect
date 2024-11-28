@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout.component';
 import { LandingComponent } from './features/home/landing/landing.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { RegisterComponent } from './features/auth/register/register.component';
 import { PatientLayoutComponent } from './layouts/patient-layout/patient-layout.component';
 import { StaffLayoutComponent } from './layouts/staff-layout/staff-layout.component';
-
 
 export const routes: Routes = [
     {
@@ -15,14 +16,14 @@ export const routes: Routes = [
                 component: LandingComponent,
                 pathMatch: 'full'
             },
-            // {
-            //     path: 'login',
-            //     //component: UserLoginComponent
-            // },
-            // {
-            //     path: 'register',
-            //     //component: UserRegisterComponent
-            // }
+            {
+                path: 'login',
+                component: LoginComponent
+            },
+            {
+                path: 'register',
+                component: RegisterComponent
+            }
         ]
     },
     {
