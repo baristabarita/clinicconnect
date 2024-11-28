@@ -8,14 +8,12 @@ clinic-connect/
 ├── client/ # Angular Frontend
 │ ├── src/
 │ │ ├── app/
-│ │ │ ├── core/ # Core functionality (WIP)
 │ │ │ ├── features/ # Feature modules
 │ │ │ │ ├── auth/
 │ │ │ │ ├── home/
 │ │ │ │ ├── patients/
 │ │ │ │ └── staff/
 │ │ │ ├── layouts/ # Page layouts
-│ │ │ ├── modules/ # Angular modules (WIP)
 │ │ │ └── shared/ # Shared components
 │ │ ├── assets/
 │ │ └── styles.css # Global styles (Tailwind CSS)
