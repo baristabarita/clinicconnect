@@ -12,7 +12,7 @@ CREATE TABLE users (
     contact VARCHAR(20),
     birthday DATE,
     password VARCHAR(255) NOT NULL,
-    userType VARCHAR(20) NOT NULL,
+    user_type VARCHAR(255) NOT NULL,
     profileImagePath VARCHAR(255) DEFAULT 'https://imgur.com/6UKAeTA.png',
     profileImageUpdatedAt TIMESTAMP
 );
