@@ -65,9 +65,14 @@ The frontend side of the application will be available at `http://localhost:4200
 
 2. Configure database connection in `api/src/main/resources/application.properties`:
 ```
+spring.application.name=api
 spring.datasource.url=jdbc:mysql://localhost:3306/clinic_db
-spring.datasource.username=root
-spring.datasource.password=root
+spring.datasource.username=enter username here
+spring.datasource.password=enter password here
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 ```
 
 3. Navigate to the api directory:
