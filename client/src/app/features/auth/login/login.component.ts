@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginCredentials, UserType, ApiResponse, AuthResponse } from '../../../shared/models/types';
 
 @Component({
   selector: 'app-login',
@@ -28,17 +29,20 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe({
-        next: (response) => {
-          if (response.role === 'STAFF') {
+      const credentials: LoginCredentials = this.loginForm.value;
+      this.authService.login(credentials).subscribe({
+        next: (response: ApiResponse<AuthResponse>) => {
+          console.log('Full login response:', response); // Debug log
+          console.log('User data:', response.data); // Debug log
+          if (response.data?.userType === UserType.STAFF) {
             this.router.navigate(['/staff/dashboard']);
           } else {
-            this.router.navigate(['/patient/dashboard']);
+            this.router.navigate(['/patient/home']);
           }
         },
         error: (error) => {
-          this.error = error.error.message || 'An error occurred';
+          console.error('Login error:', error);
+          this.error = error.error?.message || 'Login failed. Please try again.';
         }
       });
     }

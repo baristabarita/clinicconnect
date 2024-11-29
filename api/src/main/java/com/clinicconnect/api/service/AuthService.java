@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.clinicconnect.api.dto.RegisterDTO;
-import com.clinicconnect.api.dto.UserDTO;
+import com.clinicconnect.api.dto.AuthResponse;
 import com.clinicconnect.api.dto.LoginDTO;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthService {
@@ -23,11 +25,11 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
-    public UserDTO register(RegisterDTO registerDTO) {
-        if(userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
-            throw new RuntimeException("User already exists!");
+    public AuthResponse register(RegisterDTO registerDTO) {
+        if (userRepository.existsByEmail(registerDTO.getEmail())) {
+            throw new RuntimeException("Email already registered");
         }
 
         User user = new User();
@@ -38,33 +40,25 @@ public class AuthService {
         user.setAge(registerDTO.getAge());
         user.setGender(registerDTO.getGender());
         user.setContact(registerDTO.getContact());
-        user.setBirthday(LocalDate.parse(registerDTO.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        user.setBirthday(LocalDate.parse(registerDTO.getBirthday()));
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setUserType(registerDTO.getUserType());
 
-        System.out.println("User type being set: " + registerDTO.getUserType());
-
         User savedUser = userRepository.save(user);
-        return convertToDTO(savedUser);
+        String token = jwtService.generateToken(savedUser);
+        
+        return AuthResponse.fromUser(savedUser, token);
     }
 
-    private UserDTO convertToDTO(User user) {
-        UserDTO dto = new UserDTO();
-        dto.setEmail(user.getEmail());
-        dto.setFname(user.getFname());
-        dto.setLname(user.getLname());
-        dto.setMname(user.getMname());
-        dto.setUserType(user.getUserType());
-        // Don't set password for security reasons
-        return dto;
-    }
-
-    public String login(LoginDTO loginDTO) {
+    public AuthResponse login(LoginDTO loginDTO) {
         User user = userRepository.findByEmail(loginDTO.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
-        if(!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+                .orElseThrow(() -> new RuntimeException("User not found"));
+                
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
         }
-        return jwtUtil.generateToken(user.getEmail(), user.getUserType());
+
+        String token = jwtService.generateToken(user);
+        return AuthResponse.fromUser(user, token);
     }
 }
