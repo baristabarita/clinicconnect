@@ -1,21 +1,28 @@
 CREATE SCHEMA `clinic_db` ;
 
--- Create Users table
+-- Check if table exists and drop if needed
+DROP TABLE IF EXISTS users;
+
+-- Create users table
 CREATE TABLE users (
-    userID INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    fname VARCHAR(50) NOT NULL,
-    lname VARCHAR(50) NOT NULL,
-    mname VARCHAR(50),
-    age INT,
-    gender VARCHAR(20),
+    userid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fname VARCHAR(100) NOT NULL,
+    lname VARCHAR(100) NOT NULL,
+    mname VARCHAR(100),
+    user_type VARCHAR(20) NOT NULL,
     contact VARCHAR(20),
     birthday DATE,
-    password VARCHAR(255) NOT NULL,
-    user_type VARCHAR(255) NOT NULL,
-    profileImagePath VARCHAR(255) DEFAULT 'https://imgur.com/6UKAeTA.png',
-    profileImageUpdatedAt TIMESTAMP
+    age INT,
+    gender VARCHAR(10),
+    profile_image_path VARCHAR(255),
+    profile_image_updated_at TIMESTAMP
 );
+
+-- Insert test user for development
+INSERT INTO users (email, password, fname, lname, user_type) 
+VALUES ('test@example.com', '$2a$10$YourHashedPasswordHere', 'Test', 'User', 'STAFF');
 
 -- Create Doctors table
 CREATE TABLE doctors (

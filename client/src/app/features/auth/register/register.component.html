@@ -8,38 +8,11 @@
     
     <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="rounded-md shadow-sm space-y-4">
-        <!-- First Name -->
-        <div>
-          <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
-          <input
-            formControlName="firstName"
-            type="text"
-            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="John"
-          >
-          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid">
-            {{ getErrorMessage('firstName') }}
-          </p>
-        </div>
-
-        <!-- Last Name -->
-        <div>
-          <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
-          <input
-            formControlName="lastName"
-            type="text"
-            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Doe"
-          >
-          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid">
-            {{ getErrorMessage('lastName') }}
-          </p>
-        </div>
-
         <!-- Email -->
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
           <input
+            id="email"
             formControlName="email"
             type="email"
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -50,10 +23,115 @@
           </p>
         </div>
 
+        <!-- First Name -->
+        <div>
+          <label for="fname" class="block text-sm font-medium text-gray-700">First Name</label>
+          <input
+            id="fname"
+            formControlName="fname"
+            type="text"
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="John"
+          >
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('fname')?.touched && registerForm.get('fname')?.invalid">
+            {{ getErrorMessage('fname') }}
+          </p>
+        </div>
+
+        <!-- Middle Name -->
+        <div>
+          <label for="mname" class="block text-sm font-medium text-gray-700">Middle Name (Optional)</label>
+          <input
+            id="mname"
+            formControlName="mname"
+            type="text"
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="David"
+          >
+        </div>
+
+        <!-- Last Name -->
+        <div>
+          <label for="lname" class="block text-sm font-medium text-gray-700">Last Name</label>
+          <input
+            id="lname"
+            formControlName="lname"
+            type="text"
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Doe"
+          >
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('lname')?.touched && registerForm.get('lname')?.invalid">
+            {{ getErrorMessage('lname') }}
+          </p>
+        </div>
+
+        <!-- Age -->
+        <div>
+          <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+          <input
+            id="age"
+            formControlName="age"
+            type="number"
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="25"
+          >
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('age')?.touched && registerForm.get('age')?.invalid">
+            {{ getErrorMessage('age') }}
+          </p>
+        </div>
+
+        <!-- Gender -->
+        <div>
+          <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+          <select
+            id="gender"
+            formControlName="gender"
+            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          >
+            <option value="">Select Gender</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.invalid">
+            {{ getErrorMessage('gender') }}
+          </p>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <label for="contact" class="block text-sm font-medium text-gray-700">Contact Number</label>
+          <input
+            id="contact"
+            formControlName="contact"
+            type="tel"
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="09123456789"
+          >
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('contact')?.touched && registerForm.get('contact')?.invalid">
+            {{ getErrorMessage('contact') }}
+          </p>
+        </div>
+
+        <!-- Birthday -->
+        <div>
+          <label for="birthday" class="block text-sm font-medium text-gray-700">Birthday</label>
+          <input
+            id="birthday"
+            formControlName="birthday"
+            type="date"
+            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('birthday')?.touched && registerForm.get('birthday')?.invalid">
+            {{ getErrorMessage('birthday') }}
+          </p>
+        </div>
+
         <!-- Password -->
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
           <input
+            id="password"
             formControlName="password"
             type="password"
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -68,6 +146,7 @@
         <div>
           <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
           <input
+            id="confirmPassword"
             formControlName="confirmPassword"
             type="password"
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -78,11 +157,12 @@
           </p>
         </div>
 
-        <!-- Role Selection -->
+        <!-- User Type -->
         <div>
-          <label for="role" class="block text-sm font-medium text-gray-700">Register as</label>
+          <label for="userType" class="block text-sm font-medium text-gray-700">Register as</label>
           <select
-            formControlName="role"
+            id="userType"
+            formControlName="userType"
             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           >
             <option value="PATIENT">Patient</option>

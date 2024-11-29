@@ -17,10 +17,35 @@
         </svg>
       </button>
       
-      <img 
-        [src]="userProfileImage" 
-        alt="User Profile" 
-        class="h-10 w-10 rounded-full object-cover"
-      >
+      <div class="relative">
+        <button 
+          (click)="toggleProfileMenu()" 
+          class="flex items-center space-x-2 hover:bg-opacity-75 transition duration-300"
+        >
+          <img 
+            [src]="userProfileImage" 
+            alt="User Profile" 
+            class="h-10 w-10 rounded-full object-cover cursor-pointer"
+          >
+          <span class="text-sm">{{ userName }}</span>
+        </button>
+
+        <!-- Profile Dropdown Menu -->
+        <div 
+          *ngIf="isProfileMenuOpen" 
+          class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+        >
+          <div class="py-1">
+            <a routerLink="/patient/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+            <a routerLink="/patient/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+            <button 
+              (click)="logout()" 
+              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </header>
+</header>

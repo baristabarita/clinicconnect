@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +14,8 @@ export class SidebarComponent {
   isCollapsed = signal(false);
   
   @Output() sidebarToggled = new EventEmitter<boolean>();
+  
+  constructor(private authService: AuthService) {}
 
   toggleSidebar() {
     this.isCollapsed.set(!this.isCollapsed());
@@ -22,6 +24,6 @@ export class SidebarComponent {
 
   logout() {
     // Implement logout logic here
-    console.log('Logging out');
+    this.authService.logout();
   }
 }
