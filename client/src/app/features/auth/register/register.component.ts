@@ -72,12 +72,14 @@ export class RegisterComponent {
       }
 
       this.authService.register(formData).subscribe({
-        next: () => {
+        next: (response) => {
           this.isLoading = false;
+          // Redirect to login page
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           this.isLoading = false;
-          this.error = error.error.message || 'Registration failed';
+          this.error = error.message || 'Registration failed. Please try again later.';
         }
       });
     } else {

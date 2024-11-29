@@ -1,13 +1,57 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Create your account
-      </h2>
+<div class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('assets/images/log_reg_bg.jpg');">
+  <div class="bg-white rounded-lg shadow-lg p-8 max-w-2xl w-full space-y-8">
+    <div class="text-center">
+      <img src="assets/images/icon_light.png" alt="Logo" class="mx-auto mb-4">
+      <h2 class="text-2xl font-bold text-gray-900">Create your account</h2>
     </div>
     
     <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="rounded-md shadow-sm space-y-4">
+        <div class="grid grid-cols-3 gap-4">
+          <!-- First Name -->
+          <div>
+            <label for="fname" class="block text-sm font-medium text-gray-700">First Name</label>
+            <input
+              id="fname"
+              formControlName="fname"
+              type="text"
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="John"
+            >
+            <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('fname')?.touched && registerForm.get('fname')?.invalid">
+              {{ getErrorMessage('fname') }}
+            </p>
+          </div>
+
+          <!-- Middle Name -->
+          <div>
+            <label for="mname" class="block text-sm font-medium text-gray-700">Middle Name (Optional)</label>
+            <input
+              id="mname"
+              formControlName="mname"
+              type="text"
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="David"
+            >
+          </div>
+
+          <!-- Last Name -->
+          <div>
+            <label for="lname" class="block text-sm font-medium text-gray-700">Last Name</label>
+            <input
+              id="lname"
+              formControlName="lname"
+              type="text"
+              class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Doe"
+            >
+            <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('lname')?.touched && registerForm.get('lname')?.invalid">
+              {{ getErrorMessage('lname') }}
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
         <!-- Email -->
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
@@ -22,49 +66,24 @@
             {{ getErrorMessage('email') }}
           </p>
         </div>
-
-        <!-- First Name -->
+        
+        <!-- Contact -->
         <div>
-          <label for="fname" class="block text-sm font-medium text-gray-700">First Name</label>
+          <label for="contact" class="block text-sm font-medium text-gray-700">Contact Number</label>
           <input
-            id="fname"
-            formControlName="fname"
-            type="text"
+            id="contact"
+            formControlName="contact"
+            type="tel"
             class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="John"
+            placeholder="09123456789"
           >
-          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('fname')?.touched && registerForm.get('fname')?.invalid">
-            {{ getErrorMessage('fname') }}
+          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('contact')?.touched && registerForm.get('contact')?.invalid">
+            {{ getErrorMessage('contact') }}
           </p>
         </div>
-
-        <!-- Middle Name -->
-        <div>
-          <label for="mname" class="block text-sm font-medium text-gray-700">Middle Name (Optional)</label>
-          <input
-            id="mname"
-            formControlName="mname"
-            type="text"
-            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="David"
-          >
         </div>
 
-        <!-- Last Name -->
-        <div>
-          <label for="lname" class="block text-sm font-medium text-gray-700">Last Name</label>
-          <input
-            id="lname"
-            formControlName="lname"
-            type="text"
-            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Doe"
-          >
-          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('lname')?.touched && registerForm.get('lname')?.invalid">
-            {{ getErrorMessage('lname') }}
-          </p>
-        </div>
-
+        <div class="grid grid-cols-2 gap-4">
         <!-- Age -->
         <div>
           <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
@@ -97,22 +116,9 @@
             {{ getErrorMessage('gender') }}
           </p>
         </div>
-
-        <!-- Contact -->
-        <div>
-          <label for="contact" class="block text-sm font-medium text-gray-700">Contact Number</label>
-          <input
-            id="contact"
-            formControlName="contact"
-            type="tel"
-            class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="09123456789"
-          >
-          <p class="mt-1 text-sm text-red-500" *ngIf="registerForm.get('contact')?.touched && registerForm.get('contact')?.invalid">
-            {{ getErrorMessage('contact') }}
-          </p>
         </div>
 
+        
         <!-- Birthday -->
         <div>
           <label for="birthday" class="block text-sm font-medium text-gray-700">Birthday</label>
@@ -176,7 +182,7 @@
         <button
           type="submit"
           [disabled]="!registerForm.valid || isLoading"
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#125872] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#00bcd4] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
         >
           <span class="absolute left-0 inset-y-0 flex items-center pl-3">
             <svg *ngIf="isLoading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
