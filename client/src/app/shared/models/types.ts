@@ -81,3 +81,25 @@ export interface Staff {
   profileImagePath?: string;
   profileImageUpdatedAt?: Date;
 }
+
+// Doctor related types
+export interface Doctor {
+  doctorID?: number;
+  fname: string;
+  lname: string;
+  mname?: string;
+  email: string;
+  specialty?: string;
+  status: string;
+  profileImagePath?: string;
+  profileImageUpdatedAt?: Date;
+}
+
+export interface DoctorAvailability {
+    availabilityID?: number;
+    doctorID: number;
+    startDate: string;
+    endDate: string;
+    availabilityType: 'AVAILABLE' | 'ON_LEAVE' | 'PARTIALLY_AVAILABLE';
+    notes?: string;
+}

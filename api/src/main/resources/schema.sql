@@ -37,6 +37,17 @@ CREATE TABLE doctors (
     profileImageUpdatedAt TIMESTAMP
 );
 
+-- Create Doctor Availability Table
+CREATE TABLE doctor_availability (
+    availabilityID INT AUTO_INCREMENT PRIMARY KEY,
+    doctorID INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    availability_type ENUM('AVAILABLE', 'ON_LEAVE', 'PARTIALLY_AVAILABLE') NOT NULL,
+    notes TEXT DEFAULT NULL,
+    FOREIGN KEY (doctorID) REFERENCES doctors(doctorID)
+);
+
 -- Create Appointments table
 CREATE TABLE appointment (
     aptID INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,7 +56,7 @@ CREATE TABLE appointment (
     visitDate DATE NOT NULL,
     visitTime TIME NOT NULL,
     purpose TEXT,
-    status VARCHAR(20) NOT NULL,
+    status enum('SCHEDULED','CONFIRMED','CANCELED','COMPLETED','RESCHEDULED') NOT NULL,
     isDeleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (doctorID) REFERENCES doctors(doctorID)

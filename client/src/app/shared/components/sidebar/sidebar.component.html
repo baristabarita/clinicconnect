@@ -58,6 +58,22 @@
         </a>
 
         <a 
+          routerLink="/staff/doctors"
+          routerLinkActive="bg-[#93CDF6] text-black"
+          class="flex items-center p-2 rounded hover:bg-[#979797] transition duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span 
+            [class]="isCollapsed() ? 'hidden' : 'inline'"
+            class="transition-all duration-300"
+          >
+            Doctor Records
+          </span>
+        </a>
+
+        <a 
           routerLink="/staff/calendar"
           routerLinkActive="bg-[#93CDF6] text-black"
           class="flex items-center p-2 rounded hover:bg-[#979797] transition duration-300"

@@ -9,6 +9,8 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { DashboardComponent } from './features/staff/dashboard/dashboard.component';
 import { AppointmentsComponent } from './features/staff/appointments/appointments.component';
 import { DoctorsComponent } from './features/patients/doctors/doctors.component';
+import { DoctorsListComponent } from './features/staff/doctors/doctors-list/doctors-list.component';
+import { AddDoctorComponent } from './features/staff/doctors/add-doctor/add-doctor.component';
 export const routes: Routes = [
   {
     path: '',
@@ -32,6 +34,8 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'appointments', component: AppointmentsComponent },
+      { path: 'doctors', component: DoctorsListComponent },
+      { path: 'doctors/add', component: AddDoctorComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

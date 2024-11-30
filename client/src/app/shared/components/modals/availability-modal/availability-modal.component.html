@@ -1,0 +1,77 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div class="mt-3">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">
+          {{ availability ? 'Edit' : 'Add' }} Availability
+        </h3>
+        
+        <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()" class="space-y-4">
+          <!-- Start Date -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Start Date</label>
+            <input
+              type="date"
+              formControlName="startDate"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+          </div>
+  
+          <!-- End Date -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">End Date</label>
+            <input
+              type="date"
+              formControlName="endDate"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+          </div>
+  
+          <!-- Availability Type -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Availability Type</label>
+            <select
+              formControlName="availabilityType"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+              <option value="AVAILABLE">Available</option>
+              <option value="ON_LEAVE">On Leave</option>
+              <option value="PARTIALLY_AVAILABLE">Partially Available</option>
+            </select>
+          </div>
+  
+          <!-- Notes -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Notes</label>
+            <textarea
+              formControlName="notes"
+              rows="3"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+  
+          <!-- Error Message -->
+          <div *ngIf="error" class="text-red-500 text-sm">
+            {{ error }}
+          </div>
+  
+          <!-- Buttons -->
+          <div class="flex justify-end space-x-3">
+            <button
+              type="button"
+              (click)="closeModal.emit()"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="!availabilityForm.valid || isLoading"
+              class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md disabled:opacity-50"
+            >
+              {{ isLoading ? 'Saving...' : 'Save' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
