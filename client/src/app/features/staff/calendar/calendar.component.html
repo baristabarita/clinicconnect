@@ -1,1 +1,40 @@
-<p>calendar works!</p>
+<div class="p-6">
+  <!-- Header Section -->
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Calendar Overview</h2>
+    <p class="text-gray-600">View your appointments and doctor's schedules!</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+    <p class="mt-4 text-gray-600">Loading calendar...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+    {{ error }}
+  </div>
+
+  <!-- Calendar -->
+  <div *ngIf="!isLoading && !error" class="bg-white rounded-lg shadow-md p-6">
+    <!-- Legend -->
+    <div class="mb-4 flex gap-4">
+      <div class="flex items-center">
+        <div class="w-4 h-4 rounded bg-[#10B981] mr-2"></div>
+        <span class="text-sm text-gray-600">Available</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-4 h-4 rounded bg-[#EF4444] mr-2"></div>
+        <span class="text-sm text-gray-600">On Leave</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-4 h-4 rounded bg-[#F59E0B] mr-2"></div>
+        <span class="text-sm text-gray-600">Partially Available</span>
+      </div>
+    </div>
+
+    <!-- FullCalendar Component -->
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</div>
