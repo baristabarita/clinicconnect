@@ -98,6 +98,7 @@ export interface Doctor {
 export interface DoctorAvailability {
     availabilityID?: number;
     doctorID: number;
+    doctor?: Doctor;
     startDate: string;
     endDate: string;
     availabilityType: 'AVAILABLE' | 'ON_LEAVE' | 'PARTIALLY_AVAILABLE';

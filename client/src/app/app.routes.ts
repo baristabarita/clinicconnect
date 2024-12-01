@@ -11,6 +11,7 @@ import { AppointmentsComponent } from './features/staff/appointments/appointment
 import { DoctorsComponent } from './features/patients/doctors/doctors.component';
 import { DoctorsListComponent } from './features/staff/doctors/doctors-list/doctors-list.component';
 import { AddDoctorComponent } from './features/staff/doctors/add-doctor/add-doctor.component';
+import { CalendarComponent } from './features/staff/calendar/calendar.component';
 export const routes: Routes = [
   {
     path: '',
@@ -36,6 +37,7 @@ export const routes: Routes = [
       { path: 'appointments', component: AppointmentsComponent },
       { path: 'doctors', component: DoctorsListComponent },
       { path: 'doctors/add', component: AddDoctorComponent },
+      { path: 'calendar', component: CalendarComponent},
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
