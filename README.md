@@ -2,6 +2,14 @@
 
 A clinic reservation system built with Angular 18 and Spring Boot 3.4.
 
+## Contributed by
+- Ma. Keisha Atiga
+- Shane Louis A. Barita
+- Mark David Calzada
+- Cindy Lepatan
+- Lyan Jover
+- Lance Justin Ramos
+
 ## Project Structure
 ```
 clinic-connect/
