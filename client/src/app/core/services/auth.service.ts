@@ -39,13 +39,14 @@ export class AuthService {
     }).pipe(
       map(token => {
         const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Decoded Token Payload: ', payload);
         const response: ApiResponse<AuthResponse> = {
           status: 200,
           data: {
             token: token,
             userType: payload.userType,
             email: payload.sub,
-            // userid: payload.userod,
+            userid: payload.userid,
             fname: payload.fname,
             lname: payload.lname,
             mname: payload.mname,
