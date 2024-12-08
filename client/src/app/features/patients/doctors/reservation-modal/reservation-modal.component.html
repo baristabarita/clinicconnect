@@ -1,0 +1,129 @@
+<div 
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" 
+    *ngIf="isVisible"
+    (click)="onOutsideClick($event)">
+
+    <div class="bg-white rounded-3xl w-full max-w-lg pb-6 px-6 modal-content" (click)="preventClose($event)">
+        <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
+            <h2 class="text-2xl font-bold text-center">{{ title }}</h2>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onConfirm()" class="mt-4">
+            <div>
+                <div>
+                    <h2 class="text-xl font-bold mb-4">Patient Details</h2>
+                    <hr class="border-2 border-black -mt-2 w-full">
+                
+                    <div class="mt-4">
+                        <label class="block text-gray-700 font-bold">Patient Name</label>
+                        <input id="name" formControlName="name" type="text" placeholder="Enter Patient Name" class="border rounded-lg w-full p-2 mt-2" required>
+                        <p *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="text-red-500 text-sm">
+                            Name is required.
+                        </p>
+                    </div>
+                
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <!-- First Name -->
+                        <div>
+                            <label for="age" class="block text-sm text-gray-700 font-bold">Patient Age</label>
+                            <input
+                                id="age"
+                                formControlName="age"
+                                type="number"
+                                class="appearance-none relative block w-full px-3 py-2 border mt-2 border-gray-300 placeholder-gray-500 text-gray-900 rounded-md sm:text-sm"
+                                placeholder="John"
+                                required
+                            >
+                            <p *ngIf="form.get('age')?.invalid && form.get('age')?.touched" class="text-red-500 text-sm">
+                                Enter valid age.
+                            </p>
+                            </div>
+                            <!-- Birthday -->
+                        <div>
+                            <label for="bday" class="block text-sm text-gray-700 font-bold">Patient D.O.B</label>
+                            <input
+                                id="bday"
+                                formControlName="bday"
+                                type="date"
+                                class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none sm:text-sm"
+                                required
+                            >
+                            <p *ngIf="form.get('bday')?.invalid && form.get('bday')?.touched" class="text-red-500 text-sm">
+                                Birthday is required.
+                            </p>
+                        </div>
+                            <!-- Gender -->
+                        <div>
+                            <label for="gender" class="block text-sm text-gray-700 font-bold">Patient Gender</label>
+                            <select
+                                id="gender"
+                                formControlName="gender"
+                                class="w-full px-3 py-2 mt-2 text-base border-black focus:outline-none focus:border-blue-500 sm:text-sm rounded-md"
+                                required
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="attack-helicopter">Attack Helicopter</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                            <p *ngIf="form.get('gender')?.invalid && form.get('gender')?.touched" class="text-red-500 text-sm">
+                                Gender is required.
+                            </p>
+                        </div>                            
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="text-xl font-bold mb-4">Appointment Details</h2>
+                    <hr class="border-2 border-black -mt-2 w-full">
+                    <div class="mt-4">
+                        <label for="bday" class="block text-sm text-gray-700 font-bold">Patient D.O.B</label>
+                        <input
+                            id="bday"
+                            formControlName="bday"
+                            type="date"
+                            class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none sm:text-sm"
+                            required
+                        >
+                        <p *ngIf="form.get('bday')?.invalid && form.get('bday')?.touched" class="text-red-500 text-sm">
+                            Birthdate is required.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <label for="time" class="block text-sm text-gray-700 font-bold">Set Visit Time</label>
+                        <input
+                            id="time"
+                            formControlName="time"
+                            type="time"
+                            class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none sm:text-sm"
+                            required
+                        >
+                        <p *ngIf="form.get('time')?.invalid && form.get('time')?.touched" class="text-red-500 text-sm">
+                            Set your appointment time.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <label for="purpose" class="block text-sm text-gray-700 font-bold">Purpose of Visit</label>
+                        <input
+                            id="purpose"
+                            formControlName="purpose"
+                            type="input"
+                            class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none sm:text-sm"
+                            required
+                        >
+                        <p *ngIf="form.get('purpose')?.invalid && form.get('purpose')?.touched" class="text-red-500 text-sm">
+                            State your purpose.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- <p>Wahoo {{ selectedDoctor.fname }} </p> -->
+            <div class="flex justify-center gap-4 mt-6">
+                <button (click)="close()" class="bg-red-500 hover:bg-red-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg">Cancel</button>
+                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg">Confirm</button>
+            </div>
+        </form>
+        
+    </div>
+</div>
