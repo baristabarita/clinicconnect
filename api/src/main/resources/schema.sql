@@ -33,8 +33,8 @@ CREATE TABLE doctors (
     email VARCHAR(100) NOT NULL UNIQUE,
     specialty VARCHAR(100),
     status VARCHAR(20) NOT NULL,
-    profileImagePath VARCHAR(255) DEFAULT 'https://imgur.com/QQTJIpn.jpg',
-    profileImageUpdatedAt TIMESTAMP
+    profile_image_path VARCHAR(255) DEFAULT 'https://imgur.com/QQTJIpn.jpg',
+    profile_image_updated_at TIMESTAMP
 );
 
 -- Create Doctor Availability Table
@@ -53,11 +53,11 @@ CREATE TABLE appointment (
     aptID INT AUTO_INCREMENT PRIMARY KEY,
     userID INT NOT NULL,
     doctorID INT NOT NULL,
-    visitDate DATE NOT NULL,
-    visitTime TIME NOT NULL,
+    visit_date DATE NOT NULL,
+    visit_time TIME NOT NULL,
     purpose TEXT,
     status enum('SCHEDULED','CONFIRMED','CANCELED','COMPLETED','RESCHEDULED') NOT NULL,
-    isDeleted BOOLEAN DEFAULT FALSE,
+    is_deleted BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (userID) REFERENCES users(userID),
     FOREIGN KEY (doctorID) REFERENCES doctors(doctorID)
 );

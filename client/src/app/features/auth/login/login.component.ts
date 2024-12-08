@@ -31,10 +31,12 @@ export class LoginComponent {
       const credentials: LoginCredentials = this.loginForm.value;
       this.authService.login(credentials).subscribe({
         next: (response: ApiResponse<AuthResponse>) => {
-          console.log('Full login response:', response); // Debug log
-          console.log('User data:', response.data); // Debug log
-
+          console.log('Login response:', response);
           
+          // Store auth data
+          this.authService.setAuthData(response);
+          
+          // Navigate based on user type
           if (response.data?.userType === UserType.STAFF) {
             this.router.navigate(['/staff/dashboard']);
           } else {
@@ -46,6 +48,8 @@ export class LoginComponent {
           this.error = error.error?.message || 'Login failed. Please try again.';
         }
       });
+    } else {
+      this.loginForm.markAllAsTouched();
     }
   }
 }
