@@ -1,31 +1,47 @@
 package com.clinicconnect.api.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.clinicconnect.api.dto.ApiResponse;
+import com.clinicconnect.api.dto.AppointmentDTO;
+import com.clinicconnect.api.model.Appointment;
+import com.clinicconnect.api.service.AppointmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/appointments")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AppointmentController {
-    // private final AppointmentService appointmentService;
+    @Autowired
+    private AppointmentService appointmentService;
 
-    // @Autowired
-    // public AppointmentController(AppointmentService appointmentService){
-    //     this.appointmentService = appointmentService;
-    // }
+    @PostMapping
+    public ResponseEntity<ApiResponse<Appointment>> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
+        try {
+            // Debug logs
+            System.out.println("Received appointment data: " + appointmentDTO);
+            System.out.println("Visit date: " + appointmentDTO.getVisitDate());
+            System.out.println("Visit time: " + appointmentDTO.getVisitTime());
 
-    // @PostMapping("/create")
-    // public ResponseEntity<ApiResponse<Appointment>> createAppointment(@RequestBody AppointmentRequest request) {
-    //     Appointment appointment = appointmentService.createAppointment(request);
-    //     ApiResponse<Appointment> response = new ApiResponse<>(200, "Appointment created successfully", appointment);
-    //     return ResponseEntity.ok(response);
-    // }
+            Appointment appointment = appointmentService.createAppointment(appointmentDTO);
+            return ResponseEntity.ok(new ApiResponse<>(appointment, "Appointment created successfully", 200));
+        } catch (Exception e) {
+            // Print full stack trace
+            e.printStackTrace();
 
+            String errorMessage = e.getMessage();
+            Throwable cause = e.getCause();
+            while (cause != null) {
+                errorMessage += " Caused by: " + cause.getMessage();
+                cause = cause.getCause();
+            }
 
-    // @GetMapping("/list")
-    // public ApiResponse<List<Appointment>> listAppointments() {
-    //     List<Appointment> appointments = appointmentService.getAllAppointments();
-    //     return new ApiResponse.ok(200, "Appointments retrieved successfully", appointments);
-    // }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(null, errorMessage, 500));
+        }
+    }
+
 
 
 }
