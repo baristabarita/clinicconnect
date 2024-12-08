@@ -39,21 +39,23 @@ export class AuthService {
     }).pipe(
       map(token => {
         const payload = JSON.parse(atob(token.split('.')[1]));
+        const userID = this.getUserID();
         console.log('Decoded Token Payload: ', payload);
+        console.log('User ID: ', userID);
         const response: ApiResponse<AuthResponse> = {
           status: 200,
           data: {
             token: token,
             userType: payload.userType,
             email: payload.sub,
-            userid: payload.userid,
             fname: payload.fname,
             lname: payload.lname,
             mname: payload.mname,
             contact: payload.contact,
             birthday: payload.birthday,
             age: payload.age,
-            gender: payload.gender
+            gender: payload.gender,
+            userID: payload.userID
           }
         };
         return response;
@@ -106,5 +108,10 @@ export class AuthService {
 
   getCurrentUser(): AuthResponse | null {
     return this.userSubject.value;
+  }
+
+  getUserID(): number | null {
+    const user = this.userSubject.value;
+    return user?.userID ?? null; // Use nullish coalescing to handle undefined
   }
 }

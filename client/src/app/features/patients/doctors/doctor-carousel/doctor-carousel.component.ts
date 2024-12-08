@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'; // Ensure this is imported in the right module
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { Doctor } from '../../../../shared/models/types';
 import { DoctorCardComponent } from '../doctor-card/doctor-card.component';
@@ -8,19 +8,23 @@ import { ReservationModalComponent } from '../reservation-modal/reservation-moda
 @Component({
   selector: 'app-doctor-carousel',
   standalone: true,
-  imports: [CommonModule, DoctorCardComponent, ReservationModalComponent],  // Ensure CommonModule is imported here for standalone component
+  imports: [
+    CommonModule, 
+    DoctorCardComponent, 
+    ReservationModalComponent
+  ],
   templateUrl: './doctor-carousel.component.html',
   styleUrls: ['./doctor-carousel.component.css']
 })
 
 export class DoctorCarouselComponent implements OnInit {
   @Output() bookAppointmentEvent = new EventEmitter<Doctor>();
+  @Input() selectedDoctor: Doctor | null = null;
 
   doctors: Doctor[] = [];
   currentIndex: number = 0;
 
   isModalVisible: boolean = false;
-  selectedDoctor: Doctor | null = null;
 
   constructor(private doctorService: DoctorService) {}
 
