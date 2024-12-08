@@ -28,6 +28,7 @@ public class JwtService {
         Instant now = Instant.now();
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", user.getEmail());
+        claims.put("userID", user.getUserID());
         claims.put("userType", user.getUserType());
         claims.put("fname", user.getFname());
         claims.put("lname", user.getLname());

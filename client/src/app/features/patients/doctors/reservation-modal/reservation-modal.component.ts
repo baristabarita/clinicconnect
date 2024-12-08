@@ -16,7 +16,7 @@ import { Doctor } from '../../../../shared/models/types';
 export class ReservationModalComponent {
     @Input() isVisible = false;
     @Input() title = 'Modal Title';
-    @Input() selectedDoctor!: Doctor; // Ensure selectedDoctor cannot be null
+    @Input() selectedDoctor: Doctor | null = null;
     @Output() confirm = new EventEmitter<void>();
     @Output() closeModal = new EventEmitter<void>();
 
@@ -52,7 +52,7 @@ export class ReservationModalComponent {
     }
 
     onConfirm() {
-        if (this.form.valid) {
+        if (this.form.valid && this.selectedDoctor) {
             const formData = { ...this.form.value };
             console.log('Form data:', this.form.value);
             
