@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { 
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+  ApiResponse,
   AuthResponse,
   LoginCredentials,
-  RegisterData,
-  ApiResponse
- } from '../../shared/models/types';
-import { map } from 'rxjs/operators';
+  RegisterData
+} from '../../shared/models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -39,12 +39,14 @@ export class AuthService {
     }).pipe(
       map(token => {
         const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Decoded Token Payload: ', payload);
         const response: ApiResponse<AuthResponse> = {
           status: 200,
           data: {
             token: token,
             userType: payload.userType,
             email: payload.sub,
+            userid: payload.userid,
             fname: payload.fname,
             lname: payload.lname,
             mname: payload.mname,

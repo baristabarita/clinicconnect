@@ -1,1 +1,37 @@
-<p>doctor-carousel works!</p>
+<div class="relative w-9/12 mx-auto">
+  <!-- Carousel Container -->
+  <div class="overflow-hidden">
+    <div 
+      class="doctor-card-carousel flex transition-all duration-300 gap-4" 
+      [ngStyle]="{ transform: 'translateX(' + (-currentIndex * 50) + '%)' }">
+      <div 
+        *ngFor="let doctor of doctors" 
+        class="doctor-card flex-shrink-0 w-[95%] max-w-[280px] p-2">
+        <app-doctor-card [doctor]="doctor" (bookAppointmentEvent)="onBookAppointment($event)"></app-doctor-card>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Left Button -->
+  <button 
+    (click)="moveLeft()" 
+    class="absolute -left-12 top-1/2 transform -translate-y-1/2 bg-gray-500 text-white p-3 rounded-full shadow-lg">
+    &lt;
+  </button>
+  <!-- Right Button -->
+  <button 
+    (click)="moveRight()" 
+    class="absolute -right-12 top-1/2 transform -translate-y-1/2 bg-gray-500 text-white p-3 rounded-full shadow-lg">
+    &gt;
+  </button>
+
+  <reservation-modal 
+    *ngIf="isModalVisible"
+    [isVisible]="isModalVisible" 
+    [selectedDoctor]="selectedDoctor" 
+    title="Set Appointment Form"
+    (confirm)="handleConfirmation()" 
+    (closeModal)="closeModal()">
+  </reservation-modal>
+
+</div>
