@@ -100,8 +100,12 @@ export class AuthService {
   }
 
   getUserID(): number | null {
-    const user = this.userSubject.value;
-    return user?.userID ?? null; // Use nullish coalescing to handle undefined
+    const token = this.getToken();
+    if (token) {
+      const decodedToken = this.decodeToken(token);
+      return decodedToken.userID; // Adjust based on your token structure
+    }
+    return null;
   }
 
   getToken(): string | null {
@@ -110,4 +114,10 @@ export class AuthService {
     }
     return this.authToken;
   }
+
+  decodeToken(token: string): any {
+    const payload = token.split('.')[1]; // Get the payload part of the JWT
+    return JSON.parse(atob(payload)); // Decode and parse the payload
+  }
+
 }
