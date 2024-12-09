@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError, catchError } from 'rxjs';
 import { ApiResponse, Appointment } from '../../shared/models/types'; // Adjust the import path as necessary
@@ -72,4 +72,25 @@ export class AppointmentService {
             );
     }
 
+    //get RECENT appointments
+    getRecentAppointments(): Observable<ApiResponse<Appointment[]>>{
+        return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/recent`);
+    }
+
+    //get FILTERED appointments
+    getFilteredAppointments(filters: {
+        userID?: number;
+        status?: string;
+        startDate?: string;
+        endDate?: string;
+    }): Observable<ApiResponse<Appointment[]>>{
+        let params = new HttpParams();
+
+        if (filters.userID) params = params.append('userID', filters.userID.toString());
+        if (filters.status) params = params.append('status', filters.status);
+        if (filters.startDate) params = params.append('startDate', filters.startDate);
+        if (filters.endDate) params = params.append('endDate', filters.endDate);
+
+        return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/filter`, {params});
+    }    
 }
