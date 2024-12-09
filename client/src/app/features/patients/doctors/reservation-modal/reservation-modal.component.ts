@@ -19,6 +19,7 @@ export class ReservationModalComponent implements OnInit {
 
     form: FormGroup;
     showConfirmation = false;
+    showSuccess = false;
     appointmentDetails: any = null;
 
     constructor(
@@ -121,9 +122,10 @@ export class ReservationModalComponent implements OnInit {
 
             this.appointmentService.createAppointment(payload).subscribe({
                 next: (response) => {
+                    this.close;
+                    this.showSuccess = true;
+                    this.showConfirmation = false;
                     console.log('Appointment created successfully:', response);
-                    this.confirm.emit();
-                    this.close();
                 },
                 error: (error) => {
                     console.error('Full error response:', error);
@@ -137,6 +139,14 @@ export class ReservationModalComponent implements OnInit {
 
     handleConfirmationCancel() {
         this.showConfirmation = false;
+        this.close();
+    }
+
+    handleSuccessConfirm() {
+        this.showSuccess = false;
+        this.close();
+        this.confirm.emit();
+
     }
 
     private formatDate(date: string): string {
