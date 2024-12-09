@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecentAppointmentsComponent } from './appointments.component';
+import { RecentAppointmentsComponent } from './recent-appointments.component';
 
-describe('AppointmentsComponent', () => {
+describe('RecentAppointmentsComponent', () => {
   let component: RecentAppointmentsComponent;
   let fixture: ComponentFixture<RecentAppointmentsComponent>;
 
