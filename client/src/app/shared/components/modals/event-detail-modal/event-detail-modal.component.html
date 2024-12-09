@@ -1,0 +1,21 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+      <h2 class="text-xl font-bold mb-4">{{ appointment ? 'Appointment Details' : 'Availability Details' }}</h2>
+      
+      <div *ngIf="appointment">
+        <p><strong>Doctor:</strong> {{ appointment.doctor?.fname || 'Unknown' }} {{ appointment.doctor?.lname || '' }}</p>
+        <p><strong>Date:</strong> {{ appointment.visitDate | date }}</p>
+        <p><strong>Time:</strong> {{ appointment.visitTime }}</p>
+        <p><strong>Purpose:</strong> {{ appointment.purpose || 'N/A' }}</p>
+      </div>
+  
+      <div *ngIf="availability">
+        <p><strong>Doctor:</strong> {{ availability.doctor?.fname || 'Unknown' }} {{ availability.doctor?.lname || '' }}</p>
+        <p><strong>Start Date:</strong> {{ availability.startDate | date }}</p>
+        <p><strong>End Date:</strong> {{ availability.endDate | date }}</p>
+        <p><strong>Type:</strong> {{ availability.availabilityType }}</p>
+      </div>
+  
+      <button (click)="close()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Close</button>
+    </div>
+  </div>

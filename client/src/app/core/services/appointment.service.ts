@@ -16,10 +16,7 @@ export class AppointmentService {
         private authService: AuthService
     ) {}
 
-    /**
-     * Create a new appointment
-     * @param appointmentData Appointment payload
-     */
+    //Create appointments
     createAppointment(appointmentData: any): Observable<ApiResponse<any>> {
         const token = this.authService.getToken();
         
@@ -32,6 +29,9 @@ export class AppointmentService {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         });
+
+        const userID = this.authService.getUserID();
+        appointmentData.userID = userID;
 
         console.log('Token being sent:', token);
         console.log('Full headers:', headers.keys().map(key => `${key}: ${headers.get(key)}`));
@@ -49,36 +49,27 @@ export class AppointmentService {
             );
     }
 
-    /**
-     * Get all appointments
-     */
-    getAppointments(): Observable<ApiResponse<any[]>> {
-        return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}`);
+    // Method to get all appointments
+    getAppointments(): Observable<ApiResponse<Appointment[]>> {
+        const token = this.authService.getToken();
+        
+        if (!token) {
+            console.error('Authentication token not found');
+            return throwError(() => new Error('Please log in again'));
+        }
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+
+        return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/recent`, { headers })
+            .pipe(
+                catchError(error => {
+                    console.error('Error fetching appointments:', error);
+                    return throwError(() => new Error('Failed to fetch appointments'));
+                })
+            );
     }
 
-    /**
-     * Get a specific appointment by ID
-     * @param id Appointment ID
-     */
-    getAppointmentById(id: string): Observable<ApiResponse<any>> {
-        return this.http.get<ApiResponse<any>>(`${this.apiUrl}/${id}`);
-    }
-
-    /**
-     * Update an appointment
-     * @param id Appointment ID
-     * @param updates Update payload
-     */
-    updateAppointment(id: string, updates: any): Observable<ApiResponse<any>> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.put<ApiResponse<any>>(`${this.apiUrl}/${id}`, updates, { headers });
-    }
-
-    /**
-     * Delete an appointment
-     * @param id Appointment ID
-     */
-    deleteAppointment(id: string): Observable<ApiResponse<any>> {
-        return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/${id}`);
-    }
 }

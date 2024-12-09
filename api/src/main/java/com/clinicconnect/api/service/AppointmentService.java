@@ -58,6 +58,7 @@ public class AppointmentService {
 
     // Create Appointments
     public Appointment createAppointment(AppointmentDTO appointmentDTO){
+        System.out.println("Received AppointmentDTO: " + appointmentDTO);
         User user = userRepository.findById(appointmentDTO.getUserID().longValue())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

@@ -63,6 +63,7 @@ export interface Appointment {
   aptID: number;
   userID: number;
   doctorID: number;
+  doctor?: Doctor;
   visitDate: Date;
   visitTime: string;
   purpose?: string;
