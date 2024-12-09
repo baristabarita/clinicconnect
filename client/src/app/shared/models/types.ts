@@ -71,6 +71,11 @@ export interface Appointment {
   isDeleted?: boolean;
 }
 
+export interface AppointmentWithUser extends Omit<Appointment, 'userID'> {
+  userID: number;
+  userDetails?: User;
+}
+
 // Staff related types
 export interface Staff {
   userID: number;

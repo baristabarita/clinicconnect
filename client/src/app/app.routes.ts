@@ -7,7 +7,8 @@ import { LandingComponent } from './features/home/landing/landing.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { DashboardComponent } from './features/staff/dashboard/dashboard.component';
-import { RecentAppointmentsComponent } from './features/staff/appointments/appointments.component';
+import { StaffAppointmentsComponent } from './features/staff/staff-appointments/staff-appointments.component';
+import { PatientsAppointmentsComponent } from './features/patients/patient-appointments/patient-appointments.component';
 import { DoctorsComponent } from './features/patients/doctors/doctors.component';
 import { DoctorsListComponent } from './features/staff/doctors/doctors-list/doctors-list.component';
 import { AddDoctorComponent } from './features/staff/doctors/add-doctor/add-doctor.component';
@@ -30,7 +31,7 @@ export const routes: Routes = [
     data: { role: 'STAFF' },
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'appointments', component: RecentAppointmentsComponent },
+      { path: 'appointments', component: StaffAppointmentsComponent },
       { path: 'doctors', component: DoctorsListComponent },
       { path: 'doctors/add', component: AddDoctorComponent },
       { path: 'calendar', component: CalendarComponent },
@@ -45,8 +46,7 @@ export const routes: Routes = [
     children: [
       { path: 'home', component: LandingComponent },
       { path: 'doctors', component: DoctorsComponent },
-      { path: 'appointments', component: RecentAppointmentsComponent },
-      { path: 'recent-appointments', component: RecentAppointmentsComponent }, 
+      { path: 'appointments', component: PatientsAppointmentsComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
