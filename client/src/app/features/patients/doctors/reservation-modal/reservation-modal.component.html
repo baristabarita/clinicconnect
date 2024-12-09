@@ -4,7 +4,7 @@
     (click)="onOutsideClick($event)">
 
     <!-- Main Reservation Form -->
-    <div class="bg-white rounded-3xl w-full max-w-lg pb-6 px-6 modal-content" (click)="preventClose($event)" *ngIf="!showConfirmation">
+    <div class="bg-white rounded-3xl w-full max-w-lg pb-6 px-6 modal-content" (click)="preventClose($event)" *ngIf="!showConfirmation && !showSuccess">
         <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
             <h2 class="text-2xl font-bold text-center">Book an Appointment</h2>
         </div>
@@ -113,11 +113,13 @@
     </div>
 
     <!-- Confirmation Modal -->
-    <div class="bg-white rounded-lg p-6 max-w-md w-full modal-content" *ngIf="showConfirmation" (click)="preventClose($event)">
-        <h2 class="text-xl font-bold mb-4">Confirm Appointment</h2>
+    <div class="bg-white rounded-3xl pb-6 px-6 max-w-md w-full modal-content" *ngIf="showConfirmation" (click)="preventClose($event)">
+        <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
+            <h2 class="text-2xl font-bold text-center">Confirm Appointment</h2>
+        </div>
         <div class="mb-6">
-            <p class="font-medium mb-4">Please confirm your appointment details:</p>
-            <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+            <p class="font-medium mt-4">Please confirm your appointment details:</p>
+            <div class="bg-gray-50 p-4 rounded-lg space-y-2 flex flex-col">
                 <p><span class="font-bold">Doctor:</span> {{appointmentDetails?.doctorName}}</p>
                 <p><span class="font-bold">Specialty:</span> {{appointmentDetails?.specialty}}</p>
                 <p><span class="font-bold">Date:</span> {{appointmentDetails?.visit_date | date}}</p>
@@ -125,16 +127,34 @@
                 <p><span class="font-bold">Purpose:</span> {{appointmentDetails?.purpose}}</p>
             </div>
         </div>
-        <div class="flex justify-end gap-4">
+        <div class="flex justify-center gap-4 mt-6">
             <button 
                 (click)="handleConfirmationCancel()" 
-                class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-            >
+                class="bg-red-500 hover:bg-red-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg"            >
                 Cancel
             </button>
             <button 
                 (click)="handleConfirmationConfirm()" 
-                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                class="bg-yellow-500 hover:bg-yellow-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg"
+            >
+                Confirm
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Success Modal -->
+    <div class="bg-white rounded-3xl pb-6 px-6 max-w-md w-full modal-content" *ngIf="showSuccess" (click)="preventClose($event)">
+        <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
+            <h2 class="text-2xl font-bold text-center">Appointment Successfully Booked!</h2>
+        </div>
+        <div class="mb-6">
+            <p class="font-medium mt-4 text-center">We will let you know know for any updates regarding ur booking.</p>
+        </div>
+        <div class="flex justify-center gap-4 mt-6">
+            <button 
+                (click)="handleSuccessConfirm()" 
+                class="bg-[#10344F] hover:bg-[#102E45] w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg"
             >
                 Confirm
             </button>

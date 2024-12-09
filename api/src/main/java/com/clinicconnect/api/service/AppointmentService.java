@@ -1,5 +1,11 @@
 package com.clinicconnect.api.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.clinicconnect.api.dto.AppointmentDTO;
 import com.clinicconnect.api.model.Appointment;
 import com.clinicconnect.api.model.Doctor;
@@ -7,11 +13,6 @@ import com.clinicconnect.api.model.User;
 import com.clinicconnect.api.repository.AppointmentRepository;
 import com.clinicconnect.api.repository.DoctorRepository;
 import com.clinicconnect.api.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class AppointmentService {
