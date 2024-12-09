@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'app-appointments',
-  standalone: true,
-  imports: [],
-  templateUrl: './appointments.component.html',
-  // styleUrl: './appointments.component.css'
-})
-export class AppointmentsComponent {
+import { RecentAppointmentsComponent } from './appointments.component';
 
-}
+describe('AppointmentsComponent', () => {
+  let component: RecentAppointmentsComponent;
+  let fixture: ComponentFixture<RecentAppointmentsComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RecentAppointmentsComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(RecentAppointmentsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
