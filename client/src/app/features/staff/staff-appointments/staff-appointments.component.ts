@@ -4,23 +4,31 @@ import { CommonModule } from '@angular/common';
 import { Appointment, AppointmentWithUser, UserType } from '../../../shared/models/types';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { UserService } from '../../../core/services/user.service';
-import { ViewAppointmentModalComponent } from './view-appointment-modal.component';
-import { EditAppointmentModalComponent } from './edit-appointment-modal.component';
-
+import { ViewStaffAppointmentModalComponent } from '../../../shared/components/modals/view-staff-appointment-modal/view-staff-appointment-modal.component';
+import { EditAppointmentModalComponent } from '../../../shared/components/modals/edit-appointment-modal/edit-appointment-modal.component';
+import { DeleteConfirmationModalComponent } from '../../../shared/components/modals/delete-confirmation-modal/delete-confirmation-modal.component';
+import { forkJoin, of, catchError, map } from 'rxjs';
 @Component({
   selector: 'app-staff-appointments',
-  templateUrl: './staff-appointments.component.html',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ViewAppointmentModalComponent, EditAppointmentModalComponent]
+  imports: [CommonModule, 
+            ReactiveFormsModule, 
+            ViewStaffAppointmentModalComponent, 
+            EditAppointmentModalComponent,
+            DeleteConfirmationModalComponent
+          ],
+  templateUrl: './staff-appointments.component.html'
 })
 export class StaffAppointmentsComponent implements OnInit {
   appointments: AppointmentWithUser[] = [];
   filteredAppointments: AppointmentWithUser[] = [];
-  isLoading = false;
-  error: string | null = null;
   selectedAppointment: AppointmentWithUser | null = null;
   isEditModalOpen = false;
   isViewModalOpen = false;
+  isDeleteModalOpen = false;
+  appointmentToDelete: AppointmentWithUser | null = null;
+  isLoading = false;
+  error: string | null = null;
 
   filterForm = new FormGroup({
     status: new FormControl(''),
@@ -31,93 +39,127 @@ export class StaffAppointmentsComponent implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private userService: UserService
-  ){}
+  ) {}
 
-  // Mock data for appointments
-  private mockAppointments: AppointmentWithUser[] = [
-    {
-      aptID: 1,
-      userID: 101,
-      doctorID: 201,
-      purpose: 'Routine Checkup',
-      visitDate: new Date('2023-10-15'),
-      visitTime: '09:00',
-      status: 'SCHEDULED',
-      isDeleted: false,
-      userDetails: {
-        userID: 101,
-        fname: 'John',
-        lname: 'Doe',
-        email: 'john.doe@example.com',
-        userType: UserType.PATIENT
-      }
-    },
-    {
-      aptID: 2,
-      userID: 102,
-      doctorID: 202,
-      purpose: 'Dental Cleaning',
-      visitDate: new Date('2023-10-16'),
-      visitTime: '10:30',
-      status: 'CONFIRMED',
-      isDeleted: false,
-      userDetails: {
-        userID: 102,
-        fname: 'Jane',
-        lname: 'Smith',
-        email: 'jane.smith@example.com',
-        userType: UserType.PATIENT
-      }
-    },
-    // Add more mock appointments as needed
-  ];
-
-  ngOnInit(){
+  ngOnInit() {
     this.loadAppointments();
   }
 
-  loadAppointments(){
+  loadAppointments() {
     this.isLoading = true;
-    // Simulate API call delay
-    setTimeout(() => {
-      this.appointments = this.mockAppointments;
-      this.filteredAppointments = [...this.appointments];
-      this.isLoading = false;
-    }, 1000);
-  }
+    this.error = null;
 
-  applyFilters() {
-    const { status, startDate, endDate } = this.filterForm.value;
-    this.filteredAppointments = this.appointments.filter(appointment => {
-      const matchesStatus = status ? appointment.status === status : true;
-      const matchesStartDate = startDate ? new Date(appointment.visitDate) >= new Date(startDate) : true;
-      const matchesEndDate = endDate ? new Date(appointment.visitDate) <= new Date(endDate) : true;
-      return matchesStatus && matchesStartDate && matchesEndDate;
+    this.appointmentService.getAppointments().subscribe({
+      next: (response) => {
+        console.log('Appointments loaded:', response.data);
+        this.appointments = response.data || [];
+        this.filteredAppointments = [...this.appointments];
+        this.loadUserDetails();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load appointments:', error);
+        this.error = 'Failed to load appointments: ' + error.message;
+        this.isLoading = false;
+      }
     });
   }
 
+  private loadUserDetails() {
+    this.appointments = this.appointments.map(appointment => ({
+      ...appointment,
+      userID: (appointment as any).user?.userID,
+      userDetails: (appointment as any).user
+    } as AppointmentWithUser));
+    
+    this.filteredAppointments = [...this.appointments];
+  }
+
+  applyFilters() {
+    const filters = this.filterForm.value;
+    
+    // Start with the original list of appointments
+    this.filteredAppointments = [...this.appointments];
+    
+    // Apply filters if they exist
+    this.filteredAppointments = this.filteredAppointments.filter(appointment => {
+      let matches = true;
+      
+      if (filters.status && filters.status !== '') {
+        matches = matches && appointment.status === filters.status;
+      }
+      
+      if (filters.startDate && filters.startDate !== '') {
+        const startDate = new Date(filters.startDate);
+        const appointmentDate = new Date(appointment.visitDate);
+        startDate.setHours(0, 0, 0, 0);
+        appointmentDate.setHours(0, 0, 0, 0);
+        matches = matches && appointmentDate >= startDate;
+      }
+      
+      if (filters.endDate && filters.endDate !== '') {
+        const endDate = new Date(filters.endDate);
+        const appointmentDate = new Date(appointment.visitDate);
+        endDate.setHours(23, 59, 59, 999);
+        appointmentDate.setHours(23, 59, 59, 999);
+        matches = matches && appointmentDate <= endDate;
+      }
+      
+      return matches;
+    });
+  }
+
+  confirmDelete() {
+    if (this.appointmentToDelete) {
+      this.appointmentService.deleteAppointment(this.appointmentToDelete.aptID!)
+        .subscribe({
+          next: () => {
+            this.loadAppointments();
+            this.closeDeleteModal();
+          },
+          error: (error) => {
+            console.error('Error deleting appointment:', error);
+            // Handle error (could add error message display)
+          }
+        });
+    }
+  }
+
+  // View Appointment Modal Methods
   viewAppointment(appointment: AppointmentWithUser) {
     this.selectedAppointment = appointment;
     this.isViewModalOpen = true;
   }
 
-  editAppointment(appointment: AppointmentWithUser) {
+  closeViewModal() {
+    this.isViewModalOpen = false;
+    this.selectedAppointment = null;
+  }
+  
+  //Edit Appointment Modal Methods
+  openEditModal(appointment: AppointmentWithUser) {
     this.selectedAppointment = appointment;
     this.isEditModalOpen = true;
   }
-
-  closeModal() {
-    this.isViewModalOpen = false;
+  
+  closeEditModal() {
     this.isEditModalOpen = false;
     this.selectedAppointment = null;
   }
 
-  deleteAppointment(appointment: AppointmentWithUser) {
-    const confirmDelete = confirm(`Are you sure you want to delete Appointment ID: ${appointment.aptID}?`);
-    if (confirmDelete) {
-      this.filteredAppointments = this.filteredAppointments.filter(a => a.aptID !== appointment.aptID);
-      this.appointments = this.appointments.filter(a => a.aptID !== appointment.aptID);
-      alert(`Appointment ID: ${appointment.aptID} deleted successfully.`);
-    }
+  onAppointmentUpdated() {
+    this.loadAppointments();
+    this.closeEditModal();
   }
+
+  //Delete Appointment Modal Methods
+  openDeleteModal(appointment: AppointmentWithUser) {
+    this.appointmentToDelete = appointment;
+    this.isDeleteModalOpen = true;
+  }
+  closeDeleteModal() {
+    this.isDeleteModalOpen = false;
+    this.appointmentToDelete = null;
+  }
+
 }

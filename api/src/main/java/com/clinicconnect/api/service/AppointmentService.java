@@ -32,7 +32,7 @@ public class AppointmentService {
 
     // Get Recent Appointments
     public List<Appointment> getRecentAppointments(){
-        return appointmentRepository.findByOrderByVisitDateDescVisitTimeDesc();
+        return appointmentRepository.findByIsDeletedFalseOrderByVisitDateDescVisitTimeDesc();
     }
 
     // Get Appointments by Filter
@@ -41,11 +41,11 @@ public class AppointmentService {
             LocalDate startDate,
             LocalDate endDate) {
         if(status != null && startDate != null && endDate != null){
-            return appointmentRepository.findByStatusAndVisitDateBetween(status, startDate, endDate);
+            return appointmentRepository.findByStatusAndVisitDateBetweenAndIsDeletedFalse(status, startDate, endDate);
         } else if (status != null) {
-            return appointmentRepository.findByStatus(status);
+            return appointmentRepository.findByStatusAndIsDeletedFalse(status);
         } else if (startDate != null && endDate != null) {
-            return appointmentRepository.findByVisitDateBetween(startDate, endDate);
+            return appointmentRepository.findByVisitDateBetweenAndIsDeletedFalse(startDate, endDate);
         }
         return getRecentAppointments();
     }
@@ -54,6 +54,13 @@ public class AppointmentService {
     public Appointment getAppointmentDetails(Integer aptID){
         return appointmentRepository.findById(aptID)
                 .orElseThrow(()->new RuntimeException("Appointment not found"));
+    }
+
+    //Get USER specific appointments
+    public List<Appointment> getUserAppointments(Integer userID){
+        User user = userRepository.findById(userID.longValue())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return appointmentRepository.findByUserUserIDAndIsDeletedFalse(userID);
     }
 
     // Create Appointments

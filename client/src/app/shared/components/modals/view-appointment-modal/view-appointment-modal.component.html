@@ -1,0 +1,37 @@
+<div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Appointment Details</h2>
+            <button (click)="close.emit()" class="text-gray-500 hover:text-gray-700">
+                <span class="text-2xl">&times;</span>
+            </button>
+        </div>
+        
+        <div class="space-y-3">
+            <p><strong>Appointment ID:</strong> {{appointment.aptID}}</p>
+            <p><strong>Doctor:</strong> Dr. {{appointment.doctor?.fname}} {{appointment.doctor?.lname}}</p>
+            <p><strong>Purpose:</strong> {{appointment.purpose}}</p>
+            <p><strong>Date:</strong> {{appointment.visitDate | date}}</p>
+            <p><strong>Time:</strong> {{appointment.visitTime}}</p>
+            <p><strong>Status:</strong> 
+                <span [ngClass]="{
+                    'text-yellow-600': appointment.status === 'SCHEDULED',
+                    'text-blue-600': appointment.status === 'CONFIRMED',
+                    'text-green-600': appointment.status === 'COMPLETED',
+                    'text-red-600': appointment.status === 'CANCELED',
+                    'text-orange-600': appointment.status === 'RESCHEDULED'
+                }">
+                    {{appointment.status}}
+                </span>
+            </p>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <button 
+                (click)="close.emit()"
+                class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                Close
+            </button>
+        </div>
+    </div>
+</div>

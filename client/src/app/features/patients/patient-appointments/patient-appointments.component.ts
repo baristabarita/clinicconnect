@@ -2,46 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AuthService } from '../../../core/services/auth.service';
-
-interface User {
-  userID: number;
-  fname: string;
-  lname: string;
-  email: string;
-  userType: string;
-}
-
-interface Doctor {
-  doctorID: number;
-  fname: string;
-  lname: string;
-  email: string;
-  specialty?: string;
-  status?: string;
-}
-
-interface AppointmentWithUser {
-  aptID: number;
-  userID: number;
-  doctorID: number;
-  purpose: string;
-  visitDate: Date;
-  visitTime: string;
-  status: string;
-  isDeleted: boolean;
-  userDetails: User;
-  doctor: Doctor;
-}
+import { ViewAppointmentModalComponent } from '../../../shared/components/modals/view-appointment-modal/view-appointment-modal.component'; 
+import { User, Doctor, AppointmentWithUser } from '../../../shared/models/types';
 
 @Component({
   selector: 'app-patient-appointments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ViewAppointmentModalComponent],
   templateUrl: './patient-appointments.component.html',
 })
 export class PatientsAppointmentsComponent implements OnInit {
   appointments: AppointmentWithUser[] = [];
   filteredAppointments: AppointmentWithUser[] = [];
+  selectedAppointment: AppointmentWithUser | null = null;
+  isViewModalOpen = false;
   isLoading = false;
   error: string | null = null;
   activeFilter: string = 'all';
@@ -50,7 +24,8 @@ export class PatientsAppointmentsComponent implements OnInit {
     scheduled: 0,
     confirmed: 0,
     completed: 0,
-    canceled: 0
+    canceled: 0,
+    rescheduled: 0
   };
 
   constructor(
@@ -72,59 +47,29 @@ export class PatientsAppointmentsComponent implements OnInit {
       return;
     }
 
-    // Mock data for appointments
-    this.appointments = [
-      {
-        aptID: 1,
-        userID: 101,
-        doctorID: 201,
-        purpose: 'Routine Checkup',
-        visitDate: new Date('2023-10-15'),
-        visitTime: '09:00',
-        status: 'SCHEDULED',
-        isDeleted: false,
-        userDetails: {
-          userID: 101,
-          fname: 'John',
-          lname: 'Doe',
-          email: 'john.doe@example.com',
-          userType: 'PATIENT'
-        },
-        doctor: {
-          doctorID: 201,
-          fname: 'Dr. Smith',
-          lname: 'Johnson',
-          email: 'dr.smith@example.com'
-        }
+    this.appointmentService.getUserAppointments(userID).subscribe({
+      next: (response) => {
+        this.appointments = response.data || [];
+        this.filteredAppointments = [...this.appointments];
+        this.updateStats();
+        this.isLoading = false;
       },
-      {
-        aptID: 2,
-        userID: 102,
-        doctorID: 202,
-        purpose: 'Dental Cleaning',
-        visitDate: new Date('2023-10-16'),
-        visitTime: '10:30',
-        status: 'CONFIRMED',
-        isDeleted: false,
-        userDetails: {
-          userID: 102,
-          fname: 'Jane',
-          lname: 'Smith',
-          email: 'jane.smith@example.com',
-          userType: 'PATIENT'
-        },
-        doctor: {
-          doctorID: 202,
-          fname: 'Dr. Brown',
-          lname: 'Williams',
-          email: 'dr.brown@example.com'
-        }
+      error: (error) => {
+        this.error = error.message;
+        this.isLoading = false;
       }
-    ];
+    });
+  }
 
-    this.filteredAppointments = [...this.appointments];
-    this.updateStats();
-    this.isLoading = false;
+  filterAppointments(status: string) {
+    this.activeFilter = status;
+    if (status === 'all') {
+      this.filteredAppointments = [...this.appointments];
+    } else {
+      this.filteredAppointments = this.appointments.filter(
+        appointment => appointment.status === status.toUpperCase()
+      );
+    }
   }
 
   updateStats() {
@@ -133,16 +78,20 @@ export class PatientsAppointmentsComponent implements OnInit {
       scheduled: this.appointments.filter(apt => apt.status === 'SCHEDULED').length,
       confirmed: this.appointments.filter(apt => apt.status === 'CONFIRMED').length,
       completed: this.appointments.filter(apt => apt.status === 'COMPLETED').length,
-      canceled: this.appointments.filter(apt => apt.status === 'CANCELED').length
+      canceled: this.appointments.filter(apt => apt.status === 'CANCELED').length,
+      rescheduled: this.appointments.filter(apt => apt.status === 'RESCHEDULED').length
     };
   }
 
-  filterAppointments(status: string) {
-    this.activeFilter = status;
-    if (status === 'all') {
-      this.filteredAppointments = [...this.appointments];
-    } else {
-      this.filteredAppointments = this.appointments.filter(appointment => appointment.status === status);
-    }
-  }
+
+  //Opens the appointment modal
+  viewAppointment(appointment: AppointmentWithUser) {
+    this.selectedAppointment = appointment;
+    this.isViewModalOpen = true;
+}
+
+closeViewModal() {
+    this.isViewModalOpen = false;
+    this.selectedAppointment = null;
+}
 }
