@@ -25,7 +25,7 @@ export interface AuthResponse {
   birthday?: string;
   age?: number;
   gender?: string;
-  userid?: number;
+  userID?: number;
 }
 
 export interface LoginCredentials {

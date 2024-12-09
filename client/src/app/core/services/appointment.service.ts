@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiResponse } from '../../shared/models/types'; // Adjust the import path as necessary
+import { Observable, throwError, catchError } from 'rxjs';
+import { ApiResponse, Appointment } from '../../shared/models/types'; // Adjust the import path as necessary
+import { environment } from '../../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root'
@@ -9,15 +11,42 @@ import { ApiResponse } from '../../shared/models/types'; // Adjust the import pa
 export class AppointmentService {
     private apiUrl = 'http://localhost:8080/api/appointments';
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService
+    ) {}
 
     /**
      * Create a new appointment
      * @param appointmentData Appointment payload
      */
     createAppointment(appointmentData: any): Observable<ApiResponse<any>> {
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.post<ApiResponse<any>>(`${this.apiUrl}`, appointmentData, { headers });
+        const token = this.authService.getToken();
+        
+        if (!token) {
+            console.error('Authentication token not found');
+            return throwError(() => new Error('Please log in again'));
+        }
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+
+        console.log('Token being sent:', token);
+        console.log('Full headers:', headers.keys().map(key => `${key}: ${headers.get(key)}`));
+        console.log('Appointment data:', appointmentData);
+
+        return this.http.post<ApiResponse<any>>(this.apiUrl, appointmentData, { headers })
+            .pipe(
+                catchError(error => {
+                    console.error('Full error response:', error);
+                    if (error.error?.message) {
+                        return throwError(() => new Error(error.error.message));
+                    }
+                    return throwError(() => error);
+                })
+            );
     }
 
     /**

@@ -25,13 +25,12 @@
     &gt;
   </button>
 
-  <reservation-modal 
-    *ngIf="isModalVisible"
-    [isVisible]="isModalVisible" 
-    [selectedDoctor]?="selectedDoctor" 
-    title="Set Appointment Form"
-    (confirm)="handleConfirmation()" 
-    (closeModal)="closeModal()">
-  </reservation-modal>
+  <reservation-modal
+    *ngIf="isModalVisible && selectedDoctor"
+    [selectedDoctor]="selectedDoctor"
+    [isVisible]="isModalVisible"
+    (closeModal)="closeModal()"
+    (confirm)="handleConfirmation()"
+  ></reservation-modal>
 
 </div>

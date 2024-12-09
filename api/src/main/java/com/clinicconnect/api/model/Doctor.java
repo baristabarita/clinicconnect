@@ -29,9 +29,10 @@ public class Doctor {
     @Column(nullable = false)
     private String status;
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'https://imgur.com/QQTJIpn.jpg'")
+    @Column(name = "profile_image_path", columnDefinition = "VARCHAR(255) DEFAULT 'https://imgur.com/QQTJIpn.jpg'")
     private String profileImagePath;
 
+    @Column(name = "profile_image_updated_at")
     private LocalDateTime profileImageUpdatedAt;
 
     public Integer getDoctorID() {

@@ -45,10 +45,11 @@ public class User{
     @Column(name = "user_type", nullable = false)
     private String userType;
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'https://imgur.com/6UKAeTA.png'")
+    @Column(name = "profile_image_path", columnDefinition = "VARCHAR(255) DEFAULT 'https://imgur.com/6UKAeTA.png'")
     private String profileImagePath;
 
-    private java.time.LocalDateTime profileImageUpdatedAt;
+    @Column(name = "profile_image_updated_at")
+    private LocalDateTime profileImageUpdatedAt;
 
     public Integer getUserID() {
         return userID;

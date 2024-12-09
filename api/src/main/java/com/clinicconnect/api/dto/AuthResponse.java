@@ -15,6 +15,7 @@ public class AuthResponse {
     private String gender;
     private String contact;
     private String birthday;
+    private Integer userID;
 
     // Add a static factory method for convenience
     public static AuthResponse fromUser(User user, String token) {
@@ -29,6 +30,7 @@ public class AuthResponse {
         response.setGender(user.getGender());
         response.setContact(user.getContact());
         response.setBirthday(user.getBirthday() != null ? user.getBirthday().toString() : null);
+        response.setUserID(user.getUserID());
         return response;
     }
 } 
