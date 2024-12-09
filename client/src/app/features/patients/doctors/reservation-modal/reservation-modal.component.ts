@@ -63,8 +63,7 @@ export class ReservationModalComponent {
             }
 
             const payload = {
-                apiID: 'exampleApiID', // Replace with dynamic value
-                userID: 'exampleUserID', // Replace with dynamic value
+                userID: 'exampleUserID', 
                 doctorID: this.selectedDoctor.doctorID,
                 visitDate: formData.bday,
                 visitTime: formData.time,
