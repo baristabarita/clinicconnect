@@ -1,1 +1,125 @@
-<p>appointments works!</p>
+<p>recent-appointments works!</p>
+
+
+<div class="bg-gray-100 min-h-screen py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">Recent Appointments</h1>
+  
+      <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-1/4 bg-white rounded-lg shadow-md p-4">
+          <h2 class="text-lg font-semibold mb-4">View my Appointments</h2>
+          <ul class="space-y-4">
+            <li>
+              <button
+                class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-md hover:bg-blue-100 focus:bg-blue-200"
+              >
+                <span>All Appointments</span>
+                <span class="text-sm bg-green-200 text-green-800 px-2 py-0.5 rounded">1253</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-md hover:bg-blue-100 focus:bg-blue-200"
+              >
+                <span>Pending</span>
+                <span class="text-sm bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded">2</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-md hover:bg-blue-100 focus:bg-blue-200"
+              >
+                <span>Current/Ongoing</span>
+                <span class="text-sm bg-blue-200 text-blue-800 px-2 py-0.5 rounded">4</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-md hover:bg-blue-100 focus:bg-blue-200"
+              >
+                <span>Completed</span>
+                <span class="text-sm bg-gray-200 text-gray-800 px-2 py-0.5 rounded">10</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-md hover:bg-blue-100 focus:bg-blue-200"
+              >
+                <span>Cancelled</span>
+                <span class="text-sm bg-red-200 text-red-800 px-2 py-0.5 rounded">9</span>
+              </button>
+            </li>
+          </ul>
+        </aside>
+  
+        <!-- Main Content -->
+        <section class="w-3/4 ml-6">
+          <div class="space-y-6">
+            <!-- Appointment Card -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <div class="flex items-start">
+                <img
+                  src="https://via.placeholder.com/80"
+                  alt="Doctor Profile"
+                  class="w-20 h-20 rounded-full mr-4"
+                />
+                <div>
+                  <h2 class="text-lg font-semibold text-gray-800">Appointment ID: 0001</h2>
+                  <p class="text-sm text-gray-600">Status: <span class="text-blue-600 font-semibold">Upcoming</span></p>
+                  <p class="text-sm text-gray-600">Dr. Jane Doe</p>
+                  <p class="text-sm text-gray-600">Heart Ache</p>
+                  <p class="text-sm text-gray-600">Appointment Date: 03 - 04 - 24</p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                >
+                  View Appointment
+                </button>
+              </div>
+            </div>
+  
+            <!-- Repeat Appointment Cards -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <div class="flex items-start">
+                <img
+                  src="https://via.placeholder.com/80"
+                  alt="Doctor Profile"
+                  class="w-20 h-20 rounded-full mr-4"
+                />
+                <div>
+                  <h2 class="text-lg font-semibold text-gray-800">Appointment ID: 0002</h2>
+                  <p class="text-sm text-gray-600">Status: <span class="text-blue-600 font-semibold">Upcoming</span></p>
+                  <p class="text-sm text-gray-600">Dr. John Smith</p>
+                  <p class="text-sm text-gray-600">Routine Checkup</p>
+                  <p class="text-sm text-gray-600">Appointment Date: 03 - 05 - 24</p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <button
+                  class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                >
+                  View Appointment
+                </button>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Pagination -->
+          <div class="mt-8 flex justify-center">
+            <nav class="flex items-center space-x-1">
+              <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">1</button>
+              <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">2</button>
+              <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">3</button>
+              <span class="px-3 py-1">...</span>
+              <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">10</button>
+            </nav>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  
