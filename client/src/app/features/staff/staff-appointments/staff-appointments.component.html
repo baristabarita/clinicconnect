@@ -37,11 +37,20 @@
   </div>
 
   <!-- Appointments Table -->
-  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+  <div class="bg-white rounded-lg shadow-md overflow-x-auto">
     <table class="min-w-full">
-      <!-- Table header and body from existing code -->
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Name</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visit Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr *ngFor="let appointment of appointments" class="odd:bg-gray-50">
+        <tr *ngFor="let appointment of filteredAppointments" class="odd:bg-gray-50">
           <td class="px-6 py-4">{{appointment.aptID}}</td>
           <td class="px-6 py-4">{{appointment.userDetails?.fname}} {{appointment.userDetails?.lname}}</td>
           <td class="px-6 py-4">{{appointment.purpose}}</td>
@@ -55,12 +64,42 @@
               {{appointment.status}}
             </span>
           </td>
-          <td class="px-6 py-4">
-            <button class="text-blue-600 hover:text-blue-800">View Details</button>
+          <td class="px-6 py-4 space-x-2">
+            <button
+              class="text-blue-600 hover:text-blue-800"
+              (click)="viewAppointment(appointment)"
+            >
+              View
+            </button>
+            <button
+              class="text-yellow-600 hover:text-yellow-800"
+              (click)="editAppointment(appointment)"
+            >
+              Edit
+            </button>
+            <button
+              class="text-red-600 hover:text-red-800"
+              (click)="deleteAppointment(appointment)"
+            >
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-</div>
+
+  <!-- Modals -->
+  <app-view-appointment-modal 
+    *ngIf="isViewModalOpen" 
+    [appointment]="selectedAppointment" 
+    (close)="closeModal()">
+  </app-view-appointment-modal>
   
+  <app-edit-appointment-modal 
+    *ngIf="isEditModalOpen" 
+    [appointment]="selectedAppointment" 
+    (close)="closeModal()" 
+    (save)="loadAppointments()">
+  </app-edit-appointment-modal>
+</div>
