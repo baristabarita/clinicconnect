@@ -52,12 +52,24 @@ public class AppointmentController {
         }
     }
 
-    //Get full details
+    //Get and view full details
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Appointment>> getAppointmentDetails(@PathVariable Integer aptID){
         try{
             Appointment appointment = appointmentService.getAppointmentDetails(aptID);
             return ResponseEntity.ok(new ApiResponse<>(appointment, "Appointment details retrieved", 200));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse<>(null, e.getMessage(), 400));
+        }
+    }
+
+    //View specific appointments by user
+    @GetMapping("/user/{userID}")
+    public ResponseEntity<ApiResponse<List<Appointment>>> getUserAppointments(@PathVariable Integer userID) {
+        try {
+            List<Appointment> appointments = appointmentService.getUserAppointments(userID);
+            return ResponseEntity.ok(new ApiResponse<>(appointments, "User appointments retrieved successfully", 200));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(new ApiResponse<>(null, e.getMessage(), 400));
@@ -94,7 +106,7 @@ public class AppointmentController {
     //Update appointment
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Appointment>> updateAppointment(
-            @PathVariable Integer aptID,
+            @PathVariable("id") Integer aptID,
             @RequestBody AppointmentDTO updateDTO){
         try{
             Appointment updated = appointmentService.updateAppointment(aptID, updateDTO);
@@ -107,7 +119,7 @@ public class AppointmentController {
 
     //Delete Appointment
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable Integer aptID) {
+    public ResponseEntity<ApiResponse<Void>> deleteAppointment(@PathVariable("id") Integer aptID) {
         try {
             appointmentService.deleteAppointment(aptID);
             return ResponseEntity.ok(new ApiResponse<>(null, "Appointment deleted successfully", 200));

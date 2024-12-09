@@ -9,20 +9,20 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
-    List<Appointment> findByUserUserID(Integer userID);
+    List<Appointment> findByUserUserIDAndIsDeletedFalse(Integer userID);
     List<Appointment> findByDoctorDoctorID(Integer doctorID);
 
     //For recent appointments sorting
-    List<Appointment> findByOrderByVisitDateDescVisitTimeDesc();
+    List<Appointment> findByIsDeletedFalseOrderByVisitDateDescVisitTimeDesc();
 
     //For filtering appointments by status
-    List<Appointment> findByStatus(Appointment.AppointmentStatus status);
+    List<Appointment> findByStatusAndIsDeletedFalse(Appointment.AppointmentStatus status);
 
     //For filtering appointments by date range
-    List<Appointment> findByVisitDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Appointment> findByVisitDateBetweenAndIsDeletedFalse(LocalDate startDate, LocalDate endDate);
 
     //Combined filters
-    List<Appointment> findByStatusAndVisitDateBetween(
+    List<Appointment> findByStatusAndVisitDateBetweenAndIsDeletedFalse(
             Appointment.AppointmentStatus status,
             LocalDate startDate,
             LocalDate endDate
