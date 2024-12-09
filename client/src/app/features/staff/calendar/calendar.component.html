@@ -36,5 +36,14 @@
 
     <!-- FullCalendar Component -->
     <full-calendar [options]="calendarOptions"></full-calendar>
+    
   </div>
+
+  <!-- Event Detail Modal -->
+  <app-event-detail-modal 
+    [isOpen]="isModalOpen" 
+    [availability]="selectedAvailability" 
+    [appointment]="selectedAppointment"
+    (closeModal)="isModalOpen = false">
+  </app-event-detail-modal>
 </div>

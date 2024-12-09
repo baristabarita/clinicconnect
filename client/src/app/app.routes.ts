@@ -7,23 +7,20 @@ import { LandingComponent } from './features/home/landing/landing.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { DashboardComponent } from './features/staff/dashboard/dashboard.component';
-import { AppointmentsComponent } from './features/staff/appointments/appointments.component';
+import { StaffAppointmentsComponent } from './features/staff/staff-appointments/staff-appointments.component';
+import { PatientsAppointmentsComponent } from './features/patients/patient-appointments/patient-appointments.component';
 import { DoctorsComponent } from './features/patients/doctors/doctors.component';
 import { DoctorsListComponent } from './features/staff/doctors/doctors-list/doctors-list.component';
 import { AddDoctorComponent } from './features/staff/doctors/add-doctor/add-doctor.component';
 import { CalendarComponent } from './features/staff/calendar/calendar.component';
 import { AnalyticsComponent } from './features/staff/dashboard/analytics/analytics.component';
+
 export const routes: Routes = [
   {
     path: '',
     component: PublicLayoutComponent,
     children: [
-      { 
-        path: '', 
-        component: LandingComponent,
-        // canActivate: [authGuard],
-        // data: { requiresGuest: true }
-      },
+      { path: '', component: LandingComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent }
     ]
@@ -35,11 +32,12 @@ export const routes: Routes = [
     data: { role: 'STAFF' },
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'appointments', component: AppointmentsComponent },
+      { path: 'appointments', component: StaffAppointmentsComponent },
       { path: 'doctors', component: DoctorsListComponent },
       { path: 'doctors/add', component: AddDoctorComponent },
       { path: 'calendar', component: CalendarComponent},
       { path: 'analytics', component: AnalyticsComponent},
+      { path: 'calendar', component: CalendarComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -50,8 +48,8 @@ export const routes: Routes = [
     data: { role: 'PATIENT' },
     children: [
       { path: 'home', component: LandingComponent },
-      { path: 'appointments', component: AppointmentsComponent },
       { path: 'doctors', component: DoctorsComponent },
+      { path: 'appointments', component: PatientsAppointmentsComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

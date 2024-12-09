@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { 
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+  ApiResponse,
   AuthResponse,
   LoginCredentials,
-  RegisterData,
-  ApiResponse
- } from '../../shared/models/types';
-import { map } from 'rxjs/operators';
+  RegisterData
+} from '../../shared/models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -17,53 +17,41 @@ export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
   private userSubject = new BehaviorSubject<AuthResponse | null>(null);
   user$ = this.userSubject.asObservable();
+  private currentUser: any = null;
+  private authToken: string | null = null;
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.userSubject.next(JSON.parse(storedUser));
+    this.loadUserData();
+  }
+
+  private loadUserData() {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      try {
+        const parsed = JSON.parse(userData);
+        this.currentUser = parsed.data;
+        this.authToken = parsed.data?.token || null;
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        this.logout(); // Clear invalid data
+      }
     }
   }
 
   login(credentials: LoginCredentials): Observable<ApiResponse<AuthResponse>> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, credentials);
+  }
 
-    return this.http.post(`${this.apiUrl}/login`, credentials, { 
-      headers, 
-      responseType: 'text' 
-    }).pipe(
-      map(token => {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const response: ApiResponse<AuthResponse> = {
-          status: 200,
-          data: {
-            token: token,
-            userType: payload.userType,
-            email: payload.sub,
-            fname: payload.fname,
-            lname: payload.lname,
-            mname: payload.mname,
-            contact: payload.contact,
-            birthday: payload.birthday,
-            age: payload.age,
-            gender: payload.gender
-          }
-        };
-        return response;
-      }),
-      tap(response => {
-        if (response.data) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-          this.userSubject.next(response.data);
-          this.redirectBasedOnRole(response.data.userType);
-        }
-      })
-    );
+  setAuthData(response: ApiResponse<AuthResponse>) {
+    if (response?.data) {
+      this.currentUser = response.data;
+      this.authToken = response.data.token;
+      localStorage.setItem('userData', JSON.stringify(response));
+      console.log('Auth data set:', { user: this.currentUser, token: this.authToken });
+    }
   }
 
   register(userData: RegisterData): Observable<ApiResponse<AuthResponse>> {
@@ -80,7 +68,9 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('user');
+    this.currentUser = null;
+    this.authToken = null;
+    localStorage.removeItem('userData');
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
@@ -99,10 +89,35 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.userSubject.value;
+    return !!this.getToken();
   }
 
   getCurrentUser(): AuthResponse | null {
-    return this.userSubject.value;
+    if (!this.currentUser) {
+      this.loadUserData();
+    }
+    return this.currentUser;
   }
+
+  getUserID(): number | null {
+    const token = this.getToken();
+    if (token) {
+      const decodedToken = this.decodeToken(token);
+      return decodedToken.userID; // Adjust based on your token structure
+    }
+    return null;
+  }
+
+  getToken(): string | null {
+    if (!this.authToken) {
+      this.loadUserData();
+    }
+    return this.authToken;
+  }
+
+  decodeToken(token: string): any {
+    const payload = token.split('.')[1]; // Get the payload part of the JWT
+    return JSON.parse(atob(payload)); // Decode and parse the payload
+  }
+
 }

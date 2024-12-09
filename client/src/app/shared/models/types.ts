@@ -25,6 +25,7 @@ export interface AuthResponse {
   birthday?: string;
   age?: number;
   gender?: string;
+  userID?: number;
 }
 
 export interface LoginCredentials {
@@ -62,11 +63,17 @@ export interface Appointment {
   aptID: number;
   userID: number;
   doctorID: number;
+  doctor?: Doctor;
   visitDate: Date;
   visitTime: string;
   purpose?: string;
   status: string;
   isDeleted?: boolean;
+}
+
+export interface AppointmentWithUser extends Omit<Appointment, 'userID'> {
+  userID: number;
+  userDetails?: User;
 }
 
 // Staff related types

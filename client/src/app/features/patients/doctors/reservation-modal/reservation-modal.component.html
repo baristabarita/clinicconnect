@@ -1,0 +1,163 @@
+<div 
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" 
+    *ngIf="isVisible"
+    (click)="onOutsideClick($event)">
+
+    <!-- Main Reservation Form -->
+    <div class="bg-white rounded-3xl w-full max-w-lg pb-6 px-6 modal-content" (click)="preventClose($event)" *ngIf="!showConfirmation && !showSuccess">
+        <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
+            <h2 class="text-2xl font-bold text-center">Book an Appointment</h2>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onConfirm()" class="mt-4">
+            <!-- Patient Details Section -->
+            <div>
+                <h2 class="text-xl font-bold mb-4">Patient Details</h2>
+                <hr class="border-2 border-black -mt-2 w-full">
+            
+                <div class="mt-4">
+                    <label class="block text-gray-700 font-bold">Patient Name</label>
+                    <input 
+                        formControlName="name" 
+                        type="text" 
+                        class="border rounded-lg w-full p-2 mt-2 bg-gray-100" 
+                        readonly
+                    >
+                </div>
+            
+                <div class="grid grid-cols-3 gap-4 mt-4">
+                    <div>
+                        <label class="block text-sm text-gray-700 font-bold">Patient Age</label>
+                        <input
+                            formControlName="age"
+                            type="number"
+                            class="appearance-none relative block w-full px-3 py-2 border mt-2 border-gray-300 rounded-md sm:text-sm bg-gray-100"
+                            readonly
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-700 font-bold">Date of Birth</label>
+                        <input
+                            formControlName="bday"
+                            type="date"
+                            class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md sm:text-sm bg-gray-100"
+                            readonly
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-700 font-bold">Gender</label>
+                        <input
+                            formControlName="gender"
+                            type="text"
+                            class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md sm:text-sm bg-gray-100"
+                            readonly
+                        >
+                    </div>                            
+                </div>
+            </div>
+
+            <!-- Appointment Details Section -->
+            <div class="mt-6">
+                <h2 class="text-xl font-bold mb-4">Appointment Details</h2>
+                <hr class="border-2 border-black -mt-2 w-full">
+                
+                <div class="mt-4">
+                    <label class="block text-sm text-gray-700 font-bold">Visit Date</label>
+                    <input
+                        formControlName="visit_date"
+                        type="date"
+                        class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
+                        required
+                    >
+                    <p *ngIf="form.get('visit_date')?.invalid && form.get('visit_date')?.touched" class="text-red-500 text-sm">
+                        Visit Date is required
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <label class="block text-sm text-gray-700 font-bold">Visit Time</label>
+                    <input
+                        formControlName="visit_time"
+                        type="time"
+                        class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
+                        required
+                    >
+                    <p *ngIf="form.get('visit_time')?.invalid && form.get('visit_time')?.touched" class="text-red-500 text-sm">
+                        Visit Time is required
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <label class="block text-sm text-gray-700 font-bold">Purpose of Visit</label>
+                    <textarea
+                        formControlName="purpose"
+                        rows="3"
+                        class="appearance-none relative block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none sm:text-sm"
+                        required
+                    ></textarea>
+                    <p *ngIf="form.get('purpose')?.invalid && form.get('purpose')?.touched" class="text-red-500 text-sm">
+                        Purpose is required
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex justify-center gap-4 mt-6">
+                <button type="button" (click)="close()" class="bg-red-500 hover:bg-red-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg">
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="bg-white rounded-3xl pb-6 px-6 max-w-md w-full modal-content" *ngIf="showConfirmation" (click)="preventClose($event)">
+        <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
+            <h2 class="text-2xl font-bold text-center">Confirm Appointment</h2>
+        </div>
+        <div class="mb-6">
+            <p class="font-medium mt-4">Please confirm your appointment details:</p>
+            <div class="bg-gray-50 p-4 rounded-lg space-y-2 flex flex-col">
+                <p><span class="font-bold">Doctor:</span> {{appointmentDetails?.doctorName}}</p>
+                <p><span class="font-bold">Specialty:</span> {{appointmentDetails?.specialty}}</p>
+                <p><span class="font-bold">Date:</span> {{appointmentDetails?.visit_date | date}}</p>
+                <p><span class="font-bold">Time:</span> {{appointmentDetails?.visit_time}}</p>
+                <p><span class="font-bold">Purpose:</span> {{appointmentDetails?.purpose}}</p>
+            </div>
+        </div>
+        <div class="flex justify-center gap-4 mt-6">
+            <button 
+                (click)="handleConfirmationCancel()" 
+                class="bg-red-500 hover:bg-red-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg"            >
+                Cancel
+            </button>
+            <button 
+                (click)="handleConfirmationConfirm()" 
+                class="bg-yellow-500 hover:bg-yellow-600 w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg"
+            >
+                Confirm
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Success Modal -->
+    <div class="bg-white rounded-3xl pb-6 px-6 max-w-md w-full modal-content" *ngIf="showSuccess" (click)="preventClose($event)">
+        <div class="bg-[#90E0EF] rounded-t-3xl -mx-6 p-2 flex items-center justify-center">
+            <h2 class="text-2xl font-bold text-center">Appointment Successfully Booked!</h2>
+        </div>
+        <div class="mb-6">
+            <p class="font-medium mt-4 text-center">We will let you know know for any updates regarding ur booking.</p>
+        </div>
+        <div class="flex justify-center gap-4 mt-6">
+            <button 
+                (click)="handleSuccessConfirm()" 
+                class="bg-[#10344F] hover:bg-[#102E45] w-24 transition-colors ease-out text-white px-4 py-2 rounded-lg"
+            >
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
