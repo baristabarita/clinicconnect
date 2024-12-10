@@ -32,15 +32,22 @@ export class CalendarComponent implements OnInit {
       editable: false,
       selectable: true,
       eventContent: this.renderEventContent.bind(this),
+      views: {
+        dayGridMonth: {
+          // Month view specific options
+          eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+          }
+        }
+      },
+      viewDidMount: (arg) => {
+        this.calendarOptions.initialView = arg.view.type;
+      }
     };
 
-    renderEventContent(eventInfo: any) {
-      const { event } = eventInfo;
-      const startTime = new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-      const title = `${startTime} - ${event.title}`; // Include time in the title
-      return { html: `<div>${title}</div>` }; // Return the modified title
-  }
-
+    
     doctors: Doctor[] = [];
     availabilities: DoctorAvailability[] = [];
     appointments: any[] = []; //To hold appointments
@@ -49,14 +56,14 @@ export class CalendarComponent implements OnInit {
     selectedAvailability?: DoctorAvailability;
     selectedAppointment?: Appointment;
     isModalOpen = false;
-
+    
     constructor(private doctorService: DoctorService, private appointmentService: AppointmentService){}
-
+    
     ngOnInit(): void {
       this.loadDoctors();
       this.loadAppointments();
     }
-
+    
     loadDoctors() {
       this.doctorService.getDoctors().subscribe({
         next: (response) => {
@@ -75,7 +82,7 @@ export class CalendarComponent implements OnInit {
         }
       });
     }
-
+    
     loadAppointments() {
       this.appointmentService.getAppointments().subscribe({
         next: (response) => {
@@ -88,12 +95,12 @@ export class CalendarComponent implements OnInit {
         }
       });
     }
-
+    
     async loadAllAvailabilities() {
       const availabilityPromises = this.doctors.map(doctor =>
         firstValueFrom(this.doctorService.getDoctorAvailability(doctor.doctorID!))
       );
-
+      
       try {
         const responses = await Promise.all(availabilityPromises);
         this.availabilities = responses.flatMap(response => response.data || []);
@@ -102,6 +109,32 @@ export class CalendarComponent implements OnInit {
       } catch (error) {
         this.error = 'Failed to load availabilities';
         this.isLoading = false;
+      }
+    }
+    
+    renderEventContent(eventInfo: any) {
+      const { event } = eventInfo;
+      const isAppointment = event.extendedProps.appointment;
+      const currentView = this.calendarOptions.initialView;
+    
+      if (isAppointment) {
+        // For appointments
+        const startTime = new Date(event.start).toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit', 
+          hour12: true 
+        });
+        
+        if (currentView === 'dayGridMonth') {
+          // In month view, only show the time
+          return { html: `<div>${startTime}</div>` };
+        } else {
+          // In week or day view, show time and title
+          return { html: `<div>${startTime} - ${event.title}</div>` };
+        }
+      } else {
+        // For availabilities, only show the doctor name and availability type
+        return { html: `<div>${event.title}</div>` };
       }
     }
 
@@ -114,9 +147,19 @@ export class CalendarComponent implements OnInit {
           'ON_LEAVE': '#EF4444',
           'PARTIALLY_AVAILABLE': '#F59E0B'
         };
-
+    
+        // Format the availability type to be more readable
+        const formatAvailabilityType = (type: string) => {
+          return type
+            .split('_')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+        };
+    
         return {
-            title: doctor ? `${doctor.fname} ${doctor.lname} - ${availability.availabilityType}` : `Unknown Doctor - ${availability.availabilityType}`,
+            title: doctor ? 
+              `${doctor.fname} ${doctor.lname} - ${formatAvailabilityType(availability.availabilityType)}` : 
+              `Unknown Doctor - ${formatAvailabilityType(availability.availabilityType)}`,
             start: availability.startDate,
             end: availability.endDate,
             backgroundColor: colorMap[availability.availabilityType],
