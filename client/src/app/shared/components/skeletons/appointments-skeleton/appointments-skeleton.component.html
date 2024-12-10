@@ -1,0 +1,27 @@
+<div class="p-6">
+    <!-- Header Skeleton -->
+    <div class="mb-8">
+      <app-skeleton-base height="36px" width="250px" class="mb-2"></app-skeleton-base>
+      <app-skeleton-base height="20px" width="400px"></app-skeleton-base>
+    </div>
+
+    <!-- Search Bar Skeleton -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+      <app-skeleton-base height="24px" width="200px" class="mb-4"></app-skeleton-base>
+      <app-skeleton-base height="40px" width="100%"></app-skeleton-base>
+    </div>
+
+    <!-- Table Skeleton -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="p-4">
+        <div *ngFor="let i of [1,2,3,4,5]" class="border-b border-gray-200 last:border-0">
+          <div class="py-4 flex items-center space-x-4">
+            <app-skeleton-base height="24px" width="120px"></app-skeleton-base>
+            <app-skeleton-base height="24px" width="150px"></app-skeleton-base>
+            <app-skeleton-base height="24px" width="100px"></app-skeleton-base>
+            <app-skeleton-base height="24px" width="80px"></app-skeleton-base>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

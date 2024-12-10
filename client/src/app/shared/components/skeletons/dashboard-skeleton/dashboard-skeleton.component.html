@@ -1,0 +1,32 @@
+<div class="max-w-7xl mx-auto p-6">
+    <!-- Header Skeleton -->
+    <div class="mb-8">
+      <app-skeleton-base height="36px" width="300px" class="mb-2"></app-skeleton-base>
+      <app-skeleton-base height="20px" width="200px"></app-skeleton-base>
+    </div>
+
+    <!-- Stats Cards Skeleton -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div *ngFor="let i of [1,2,3,4]" class="bg-white rounded-xl shadow-lg p-6">
+        <div class="flex items-center">
+          <app-skeleton-base height="48px" width="48px" class="rounded-full"></app-skeleton-base>
+          <div class="ml-4 flex-1">
+            <app-skeleton-base height="16px" width="100px" class="mb-2"></app-skeleton-base>
+            <app-skeleton-base height="24px" width="60px"></app-skeleton-base>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Skeleton -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <app-skeleton-base height="24px" width="200px" class="mb-4"></app-skeleton-base>
+        <app-skeleton-base height="300px"></app-skeleton-base>
+      </div>
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <app-skeleton-base height="24px" width="200px" class="mb-4"></app-skeleton-base>
+        <app-skeleton-base height="300px"></app-skeleton-base>
+      </div>
+    </div>
+  </div>
