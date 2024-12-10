@@ -5,6 +5,7 @@ import { UserService } from '../../../core/services/user.service';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { AnalyticsService } from '../../../core/services/analytics.service';
 import { AppointmentWithUser } from '../../../shared/models/types';
+import { DashboardSkeletonComponent } from '../../../shared/components/skeletons/dashboard-skeleton/dashboard-skeleton.component';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -14,6 +15,7 @@ import Chart from 'chart.js/auto';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
+  // isLoading = true;
   stats = {
     totalAppointments: 0,
     activeDoctors: 0,
@@ -75,9 +77,15 @@ export class DashboardComponent implements OnInit {
 
   private loadRecentAppointments() {
     this.appointmentService.getRecentAppointments().subscribe(response => {
-      this.recentAppointments = (response.data || []).slice(0, 5);
+      this.recentAppointments = (response.data || []).slice(0, 5).map(appointment => ({
+        ...appointment,
+        userDetails: (appointment as any).user  // Type assertion to bypass check
+      }));
+      
+      console.log('Processed appointments:', this.recentAppointments); // Debug log
     });
   }
+  
 
   private loadCharts() {
     this.loadAppointmentsPerMonth();
