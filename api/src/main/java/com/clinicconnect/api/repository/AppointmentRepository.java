@@ -31,13 +31,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     // Gets appointments per month
     @Query("SELECT MONTHNAME(a.visitDate), COUNT(a) " +
-            "FROM appointment a GROUP BY MONTH(a.visitDate) " +
+            "FROM Appointment a GROUP BY MONTH(a.visitDate) " +
             "ORDER BY MONTH(a.visitDate)")
     List<Object[]> findAppointmentsPerMonth();
 
     // Gets appointment status
     @Query("SELECT a.status, COUNT(a) " +
-            "FROM appointment a " +
+            "FROM Appointment a " +
             "GROUP BY a.status")
     List<Object[]> findPendingAppointments();
 }

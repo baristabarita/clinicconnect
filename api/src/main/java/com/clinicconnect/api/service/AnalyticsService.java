@@ -2,6 +2,7 @@ package com.clinicconnect.api.service;
 
 import com.clinicconnect.api.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class AnalyticsService {
 
     @Autowired
