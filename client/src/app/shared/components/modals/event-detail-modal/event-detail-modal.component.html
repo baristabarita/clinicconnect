@@ -1,21 +1,87 @@
-<div *ngIf="isOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 max-w-md w-full">
-      <h2 class="text-xl font-bold mb-4">{{ appointment ? 'Appointment Details' : 'Availability Details' }}</h2>
-      
-      <div *ngIf="appointment">
-        <p><strong>Doctor:</strong> {{ appointment.doctor?.fname || 'Unknown' }} {{ appointment.doctor?.lname || '' }}</p>
-        <p><strong>Date:</strong> {{ appointment.visitDate | date }}</p>
-        <p><strong>Time:</strong> {{ appointment.visitTime }}</p>
-        <p><strong>Purpose:</strong> {{ appointment.purpose || 'N/A' }}</p>
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full transform transition-all">
+    <!-- Header -->
+    <div class="bg-[#90E0EF] rounded-t-lg p-4">
+      <h2 class="text-2xl font-bold text-center text-[#1D3557]">
+        {{ appointment ? 'Appointment Details' : 'Availability Details' }}
+      </h2>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+      <!-- Appointment Details -->
+      <div *ngIf="appointment" class="space-y-4">
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">Doctor</span>
+          <span class="col-span-2">Dr. {{ appointment.doctor?.fname }} {{ appointment.doctor?.lname }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">Date</span>
+          <span class="col-span-2">{{ appointment.visitDate | date }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">Time</span>
+          <span class="col-span-2">{{ formatTime(appointment.visitTime) }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">Purpose</span>
+          <span class="col-span-2">{{ appointment.purpose || 'N/A' }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center">
+          <span class="text-gray-600 font-medium">Status</span>
+          <span class="col-span-2" [ngClass]="{
+            'text-yellow-600 font-medium': appointment.status === 'SCHEDULED',
+            'text-blue-600 font-medium': appointment.status === 'CONFIRMED',
+            'text-green-600 font-medium': appointment.status === 'COMPLETED',
+            'text-red-600 font-medium': appointment.status === 'CANCELED',
+            'text-orange-600 font-medium': appointment.status === 'RESCHEDULED'
+          }">
+            {{ formatStatus(appointment.status) }}
+          </span>
+        </div>
       </div>
-  
-      <div *ngIf="availability">
-        <p><strong>Doctor:</strong> {{ availability.doctor?.fname || 'Unknown' }} {{ availability.doctor?.lname || '' }}</p>
-        <p><strong>Start Date:</strong> {{ availability.startDate | date }}</p>
-        <p><strong>End Date:</strong> {{ availability.endDate | date }}</p>
-        <p><strong>Type:</strong> {{ availability.availabilityType }}</p>
+
+      <!-- Availability Details -->
+      <div *ngIf="availability" class="space-y-4">
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">Doctor</span>
+          <span class="col-span-2">Dr. {{ availability.doctor?.fname }} {{ availability.doctor?.lname }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">Start Date</span>
+          <span class="col-span-2">{{ availability.startDate | date }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center border-b pb-2">
+          <span class="text-gray-600 font-medium">End Date</span>
+          <span class="col-span-2">{{ availability.endDate | date }}</span>
+        </div>
+
+        <div class="grid grid-cols-3 items-center">
+          <span class="text-gray-600 font-medium">Status</span>
+          <span class="col-span-2" [ngClass]="{
+            'text-green-600 font-medium': availability.availabilityType === 'AVAILABLE',
+            'text-red-600 font-medium': availability.availabilityType === 'ON_LEAVE',
+            'text-yellow-600 font-medium': availability.availabilityType === 'PARTIALLY_AVAILABLE'
+          }">
+            {{ formatAvailabilityType(availability.availabilityType) }}
+          </span>
+        </div>
       </div>
-  
-      <button (click)="close()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Close</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex justify-end space-x-3">
+      <button 
+        (click)="close()"
+        class="bg-[#1D3557] text-white px-6 py-2 rounded-lg hover:bg-[#2a4a7a] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3557]">
+        Close
+      </button>
     </div>
   </div>
+</div>
