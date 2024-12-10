@@ -14,10 +14,9 @@ import { User, Doctor, AppointmentWithUser } from '../../../shared/models/types'
 export class PatientsAppointmentsComponent implements OnInit {
   appointments: AppointmentWithUser[] = [];
   filteredAppointments: AppointmentWithUser[] = [];
+  paginatedAppointments: AppointmentWithUser[] = [];
   selectedAppointment: AppointmentWithUser | null = null;
   isViewModalOpen = false;
-  isLoading = false;
-  error: string | null = null;
   activeFilter: string = 'all';
   stats = {
     all: 0,
@@ -27,6 +26,11 @@ export class PatientsAppointmentsComponent implements OnInit {
     canceled: 0,
     rescheduled: 0
   };
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalPages: number = 1;
+  isLoading = false;
+  error: string | null = null;
 
   constructor(
     private appointmentService: AppointmentService,
@@ -50,7 +54,7 @@ export class PatientsAppointmentsComponent implements OnInit {
     this.appointmentService.getUserAppointments(userID).subscribe({
       next: (response) => {
         this.appointments = response.data || [];
-        this.filteredAppointments = [...this.appointments];
+        this.filterAppointments('all');
         this.updateStats();
         this.isLoading = false;
       },
@@ -70,6 +74,8 @@ export class PatientsAppointmentsComponent implements OnInit {
         appointment => appointment.status === status.toUpperCase()
       );
     }
+    this.currentPage = 1;
+    this.updatePagination();
   }
 
   updateStats() {
@@ -88,10 +94,24 @@ export class PatientsAppointmentsComponent implements OnInit {
   viewAppointment(appointment: AppointmentWithUser) {
     this.selectedAppointment = appointment;
     this.isViewModalOpen = true;
-}
+  }
 
-closeViewModal() {
-    this.isViewModalOpen = false;
-    this.selectedAppointment = null;
-}
+  closeViewModal() {
+      this.isViewModalOpen = false;
+      this.selectedAppointment = null;
+  }
+
+  updatePagination() {
+    this.totalPages = Math.ceil(this.filteredAppointments.length / this.itemsPerPage);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedAppointments = this.filteredAppointments.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagination();
+    }
+  }
 }

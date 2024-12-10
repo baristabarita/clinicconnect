@@ -1,12 +1,12 @@
-<header class="bg-[#125872] text-white py-4 px-6 flex items-center justify-between">
+<header class="bg-[#125872] text-white py-4 px-6 flex items-center justify-between font-montserrat">
     <div class="flex items-center">
       <img src="assets/images/icon_dark.png" alt="Clinic Logo" class="h-10 w-auto">
     </div>
     
     <nav class="flex items-center space-x-6">
-      <a routerLink="/patient/home" class="hover:text-gray-300 transition duration-300">Home</a>
-      <a routerLink="/patient/doctors" class="hover:text-gray-300 transition duration-300">Doctors</a>
-      <a routerLink="/patient/appointments" class="hover:text-gray-300 transition duration-300">My Appointments</a>
+      <a routerLink="/patient/home" [ngClass]="{'text-[#F5CB5C]': isActive('/patient/home')}" class="hover:text-gray-300 transition duration-300">Home</a>
+      <a routerLink="/patient/doctors" [ngClass]="{'text-[#F5CB5C]': isActive('/patient/doctors')}" class="hover:text-gray-300 transition duration-300">Doctors</a>
+      <a routerLink="/patient/appointments" [ngClass]="{'text-[#F5CB5C]': isActive('/patient/appointments')}" class="hover:text-gray-300 transition duration-300">My Appointments</a>
     </nav>
     
     <div class="flex items-center space-x-4">
@@ -35,8 +35,8 @@
           class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
         >
           <div class="py-1">
-            <a routerLink="/patient/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-            <a routerLink="/patient/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+            <!-- <a routerLink="/patient/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+            <a routerLink="/patient/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a> -->
             <button 
               (click)="logout()" 
               class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

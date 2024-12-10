@@ -16,9 +16,13 @@ export class EditAppointmentModalComponent implements OnInit {
   @Output() save = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
 
+  isSubmitting = false;
+  errorMessage: string | null = null;
+
   editForm = new FormGroup({
-    purpose: new FormControl('', Validators.required),
+    purpose: new FormControl('', [Validators.required, Validators.minLength(3)]),
     visitDate: new FormControl('', Validators.required),
+    visitTime: new FormControl('', Validators.required),
     status: new FormControl('', Validators.required)
   });
 
@@ -28,12 +32,13 @@ export class EditAppointmentModalComponent implements OnInit {
     this.editForm.setValue({
       purpose: this.appointment.purpose || '',
       visitDate: this.appointment.visitDate ? new Date(this.appointment.visitDate).toISOString().split('T')[0] : '',
+      visitTime: this.appointment.visitTime || '',
       status: this.appointment.status || ''
     });
   }
 
   onSave() {
-    if (this.editForm.valid) {
+    if (this.editForm.valid && !this.isSubmitting) {
       const updatedAppointment = {
         ...this.appointment,
         ...this.editForm.value,
@@ -43,13 +48,20 @@ export class EditAppointmentModalComponent implements OnInit {
       this.appointmentService.updateAppointment(this.appointment.aptID!, updatedAppointment)
         .subscribe({
           next: () => {
+            this.isSubmitting = false;
             this.save.emit();
           },
           error: (error) => {
+            this.isSubmitting = false;
+            this.errorMessage = error.message || 'An error occurred while updating the appointment';
             console.error('Error updating appointment:', error);
-            // You could add error handling UI feedback here
           }
         });
     }
+  }
+  // Helper method to check if form control is invalid
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.editForm.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
   }
 }

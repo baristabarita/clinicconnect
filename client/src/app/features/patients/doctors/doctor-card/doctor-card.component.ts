@@ -8,7 +8,6 @@ import { ReservationModalComponent } from '../reservation-modal/reservation-moda
   standalone: true,
   imports: [CommonModule, ReservationModalComponent],
   templateUrl: './doctor-card.component.html',
-  styleUrl: './doctor-card.component.css'
 })
 
 export class DoctorCardComponent {

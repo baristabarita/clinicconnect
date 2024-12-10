@@ -1,35 +1,109 @@
-<div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" *ngIf="appointment">
-    <div class="bg-white rounded-lg p-6 max-w-md w-full">
-      <div class="modal-header flex justify-between items-center">
-        <h4 class="modal-title text-lg font-bold">Edit Appointment</h4>
-        <button type="button" class="text-gray-500 hover:text-gray-700" aria-label="Close" (click)="close.emit()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mt-4">
-        <form [formGroup]="editForm">
-          <div class="form-group mb-4">
-            <label for="purpose" class="block text-sm font-medium text-gray-700"><strong>Purpose</strong></label>
-            <input id="purpose" type="text" formControlName="purpose" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-          <div class="form-group mb-4">
-            <label for="visitDate" class="block text-sm font-medium text-gray-700"><strong>Visit Date</strong></label>
-            <input id="visitDate" type="date" formControlName="visitDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-          <div class="form-group mb-4">
-            <label for="status" class="block text-sm font-medium text-gray-700"><strong>Status</strong></label>
-            <select id="status" formControlName="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <option value="SCHEDULED">Scheduled</option>
-              <option value="CONFIRMED">Confirmed</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="CANCELED">Cancelled</option>
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer mt-4 flex justify-end space-x-2">
-        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600" (click)="close.emit()">Cancel</button>
-        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" (click)="onSave()">Save</button>
-      </div>
+<div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full transform transition-all">
+        <!-- Header -->
+        <div class="bg-[#90E0EF] rounded-t-xl p-6">
+            <div class="flex justify-between items-center">
+                <h4 class="text-2xl font-bold text-[#1D3557]">Edit Appointment</h4>
+                <button 
+                    type="button" 
+                    class="text-[#1D3557] hover:text-gray-700 transition-colors" 
+                    aria-label="Close" 
+                    (click)="close.emit()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6">
+            <form [formGroup]="editForm" class="space-y-5">
+                <!-- Purpose -->
+                <div class="form-group">
+                    <label for="purpose" class="block text-sm font-semibold text-gray-700 mb-1">Purpose</label>
+                    <input 
+                        id="purpose" 
+                        type="text" 
+                        formControlName="purpose"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        placeholder="Enter appointment purpose"
+                    >
+                </div>
+
+                <!-- Visit Date -->
+                <div class="form-group">
+                    <label for="visitDate" class="block text-sm font-semibold text-gray-700 mb-1">Visit Date</label>
+                    <input 
+                        id="visitDate" 
+                        type="date" 
+                        formControlName="visitDate"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                </div>
+
+                <!-- Visit Time -->
+                <div class="form-group">
+                    <label for="visitTime" class="block text-sm font-semibold text-gray-700 mb-1">Visit Time</label>
+                    <input 
+                        id="visitTime" 
+                        type="time" 
+                        formControlName="visitTime"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    >
+                </div>
+
+                <!-- Status -->
+                <div class="form-group relative">
+                    <label for="status" class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
+                    <select 
+                        id="status" 
+                        formControlName="status"
+                        class="w-full px-4 py-2 pr-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none bg-white"
+                    >
+                        <option value="SCHEDULED" class="py-1">Scheduled</option>
+                        <option value="RESCHEDULED" class="py-1">Rescheduled</option>
+                        <option value="CONFIRMED" class="py-1">Confirmed</option>
+                        <option value="COMPLETED" class="py-1">Completed</option>
+                        <option value="CANCELED" class="py-1">Cancelled</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none mt-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+
+                <!-- Validation Messages -->
+                <div class="space-y-2">
+                    <p *ngIf="editForm.get('purpose')?.invalid && editForm.get('purpose')?.touched" 
+                       class="text-red-500 text-sm">Purpose is required</p>
+                    <p *ngIf="editForm.get('visitDate')?.invalid && editForm.get('visitDate')?.touched" 
+                       class="text-red-500 text-sm">Visit date is required</p>
+                    <p *ngIf="editForm.get('visitTime')?.invalid && editForm.get('visitTime')?.touched" 
+                       class="text-red-500 text-sm">Visit time is required</p>
+                    <p *ngIf="editForm.get('status')?.invalid && editForm.get('status')?.touched" 
+                       class="text-red-500 text-sm">Status is required</p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 rounded-b-xl flex justify-end space-x-3">
+            <button 
+                type="button" 
+                class="px-4 py-2 rounded-lg text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors font-medium"
+                (click)="close.emit()"
+            >
+                Cancel
+            </button>
+            <button 
+                type="button" 
+                class="px-4 py-2 rounded-lg text-white bg-[#24306E] hover:bg-[#1a2356] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                (click)="onSave()"
+                [disabled]="!editForm.valid"
+            >
+                Save Changes
+            </button>
+        </div>
     </div>
-  </div>
+</div>
