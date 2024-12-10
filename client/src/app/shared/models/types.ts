@@ -111,3 +111,13 @@ export interface DoctorAvailability {
     availabilityType: 'AVAILABLE' | 'ON_LEAVE' | 'PARTIALLY_AVAILABLE';
     notes?: string;
 }
+
+export interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  type: 'appointment' | 'system' | 'reminder';
+  isRead: boolean;
+  timestamp: Date;
+  link?: string;
+}

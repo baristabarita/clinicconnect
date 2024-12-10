@@ -1,1 +1,48 @@
-<p>notifications works!</p>
+<div class="relative">
+  <!-- Notification Badge -->
+  <div *ngIf="getUnreadCount() > 0" 
+       class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+    {{getUnreadCount()}}
+  </div>
+
+  <!-- Notifications Panel -->
+  <div *ngIf="isOpen" 
+       class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50 border border-gray-200">
+    <div class="p-4 bg-[#125872] text-white">
+      <h3 class="text-lg font-semibold">Notifications</h3>
+    </div>
+
+    <div class="max-h-96 overflow-y-auto">
+      <div *ngIf="notifications.length === 0" class="p-4 text-center text-gray-500">
+        No notifications
+      </div>
+
+      <div *ngFor="let notification of notifications" 
+           [routerLink]="notification.link"
+           (click)="markAsRead(notification)"
+           class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+           [class.bg-blue-50]="!notification.isRead">
+        <div class="flex items-start">
+          <!-- Icon based on notification type -->
+          <div class="mr-3" [ngSwitch]="notification.type">
+            <svg *ngSwitchCase="'appointment'" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <svg *ngSwitchCase="'system'" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <svg *ngSwitchCase="'reminder'" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+
+          <div class="flex-1">
+            <p class="font-semibold text-gray-900">{{notification.title}}</p>
+            <p class="text-sm text-gray-600">{{notification.message}}</p>
+            <p class="text-xs text-gray-400 mt-1">{{notification.timestamp | date:'short'}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
