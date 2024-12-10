@@ -29,15 +29,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             LocalDate endDate
     );
 
+    List<Appointment> findByVisitDateAndIsDeletedFalse(LocalDate date);
+
     // Gets appointments per month
-    @Query("SELECT MONTHNAME(a.visitDate), COUNT(a) " +
-            "FROM Appointment a GROUP BY MONTH(a.visitDate) " +
-            "ORDER BY MONTH(a.visitDate)")
+    @Query(value = "SELECT DATE_FORMAT(visit_date, '%Y-%m') as month, COUNT(*) as count " +
+            "FROM appointment " +
+            "WHERE YEAR(visit_date) = YEAR(CURRENT_DATE) " +
+            "GROUP BY DATE_FORMAT(visit_date, '%Y-%m') " +
+            "ORDER BY DATE_FORMAT(visit_date, '%Y-%m')", nativeQuery = true)
     List<Object[]> findAppointmentsPerMonth();
 
-    // Gets appointment status
-    @Query("SELECT a.status, COUNT(a) " +
-            "FROM Appointment a " +
-            "GROUP BY a.status")
+    @Query(value = "SELECT status, COUNT(*) as count " +
+            "FROM appointment " +
+            "WHERE status IN ('SCHEDULED', 'CONFIRMED', 'COMPLETED', 'CANCELLED') " +
+            "GROUP BY status", nativeQuery = true)
     List<Object[]> findPendingAppointments();
 }

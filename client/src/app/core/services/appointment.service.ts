@@ -44,7 +44,44 @@ export class AppointmentService {
     getRecentAppointments(): Observable<ApiResponse<Appointment[]>>{
         return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/recent`);
     }
-    
+    //get appointments by date
+    getAppointmentsByDate(date: string): Observable<ApiResponse<Appointment[]>> {
+        const token = this.authService.getToken();
+        if (!token) {
+            return throwError(() => new Error('Authentication required'));
+        }
+        
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        
+        return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/date/${date}`, { headers })
+            .pipe(
+                catchError(error => {
+                    console.error('Error fetching appointments by date:', error);
+                    return throwError(() => new Error('Failed to fetch appointments by date'));
+                })
+            );
+    }
+
+    getAppointmentsByStatus(status: string): Observable<ApiResponse<Appointment[]>> {
+        const token = this.authService.getToken();
+        if (!token) {
+            return throwError(() => new Error('Authentication required'));
+        }
+        
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`
+        });
+        
+        return this.http.get<ApiResponse<Appointment[]>>(`${this.apiUrl}/status/${status.toUpperCase()}`, { headers })
+            .pipe(
+                catchError(error => {
+                    console.error('Error fetching appointments by status:', error);
+                    return throwError(() => new Error('Failed to fetch appointments by status'));
+                })
+            );
+    }
     //get FILTERED appointments
     getFilteredAppointments(filters: {
         userID?: number;
