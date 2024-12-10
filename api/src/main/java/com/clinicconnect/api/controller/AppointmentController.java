@@ -76,6 +76,35 @@ public class AppointmentController {
         }
     }
 
+    //View Appointments by Date
+    @GetMapping("/date/{date}")
+    public ResponseEntity<ApiResponse<List<Appointment>>> getAppointmentsByDate(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        try {
+            List<Appointment> appointments = appointmentService.getAppointmentsByDate(date);
+            return ResponseEntity.ok(new ApiResponse<>(appointments, "Appointments for the date retrieved", 200));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(null, "No appointments found for the given date", 404));
+        }
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<ApiResponse<List<Appointment>>> getAppointmentsByStatus(
+            @PathVariable String status) {
+        try {
+            Appointment.AppointmentStatus statusEnum = Appointment.AppointmentStatus.valueOf(status.toUpperCase());
+            List<Appointment> appointments = appointmentService.getAppointmentsByStatus(statusEnum);
+            return ResponseEntity.ok(new ApiResponse<>(appointments, "Appointments with status retrieved", 200));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(null, "Invalid status value", 400));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(null, "No appointments found with the given status", 404));
+        }
+    }
+
     //Creating Appointments
     @PostMapping
     public ResponseEntity<ApiResponse<Appointment>> createAppointment(@RequestBody AppointmentDTO appointmentDTO){

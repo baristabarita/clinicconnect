@@ -17,31 +17,55 @@ public class AnalyticsService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    // Fetch number of appointments per month
     public Map<String, Integer> getAppointmentsPerMonth() {
-        Map<String, Integer> data = new HashMap<>();
-        var results = appointmentRepository.findAppointmentsPerMonth();
+        try {
+            Map<String, Integer> data = new HashMap<>();
+            var results = appointmentRepository.findAppointmentsPerMonth();
 
-        for (Object[] row : results) {
-            String month = (String) row[0];
-            Integer count = ((Number) row[1]).intValue();
-            data.put(month, count);
+            if (results.isEmpty()) {
+                // Return empty data for months if no appointments
+                String[] months = {"January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"};
+                for (String month : months) {
+                    data.put(month, 0);
+                }
+            } else {
+                for (Object[] row : results) {
+                    String month = (String) row[0];
+                    Integer count = ((Number) row[1]).intValue();
+                    data.put(month, count);
+                }
+            }
+
+            return data;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching appointments per month", e);
         }
-
-        return data;
     }
 
-    // Fetch pending appointments
     public Map<String, Integer> getPendingAppointments() {
-        Map<String, Integer> data = new HashMap<>();
-        var results = appointmentRepository.findPendingAppointments();
+        try {
+            Map<String, Integer> data = new HashMap<>();
+            var results = appointmentRepository.findPendingAppointments();
 
-        for (Object[] row : results) {
-            String status = (String) row[0];
-            Integer count = ((Number) row[1]).intValue();
-            data.put(status, count);
+            if (results.isEmpty()) {
+                // Initialize with zero counts if no data
+                data.put("SCHEDULED", 0);
+                data.put("CONFIRMED", 0);
+                data.put("COMPLETED", 0);
+                data.put("CANCELLED", 0);
+            } else {
+                for (Object[] row : results) {
+                    String status = (String) row[0];
+                    Integer count = ((Number) row[1]).intValue();
+                    data.put(status, count);
+                }
+            }
+
+            return data;
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching appointment status counts", e);
         }
-
-        return data;
     }
 }
+

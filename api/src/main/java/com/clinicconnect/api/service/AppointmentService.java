@@ -63,6 +63,14 @@ public class AppointmentService {
         return appointmentRepository.findByUserUserIDAndIsDeletedFalse(userID);
     }
 
+    public List<Appointment> getAppointmentsByDate(LocalDate date) {
+        return appointmentRepository.findByVisitDateAndIsDeletedFalse(date);
+    }
+
+    public List<Appointment> getAppointmentsByStatus(Appointment.AppointmentStatus status) {
+        return appointmentRepository.findByStatusAndIsDeletedFalse(status);
+    }
+
     // Create Appointments
     public Appointment createAppointment(AppointmentDTO appointmentDTO){
         System.out.println("Received AppointmentDTO: " + appointmentDTO);
