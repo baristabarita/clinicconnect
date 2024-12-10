@@ -6,7 +6,7 @@
   </div>
 
   <!-- Content -->
-<div class="relative container mx-auto px-4 py-32">
+<div class="relative container mx-auto px-4 py-32 font-open-sans">
   <div class="max-w-3xl">
     <h1 class="text-5xl font-bold text-white mb-6">
       Clinic Connect: Streamlining Clinic Reservations
@@ -15,7 +15,7 @@
       Streamline appointments and enhance patient care with Clinic Connect, 
       your all-in-one solution for modern clinic management.
     </p>
-    <div class="space-x-4">
+    <div class="space-x-4" *ngIf="!isPatientLayout">
       <a 
         routerLink="/register" 
         class="inline-block bg-teal-400 text-white px-8 py-4 rounded-md hover:bg-teal-500 transition duration-300 text-lg font-semibold"
@@ -28,7 +28,7 @@
 </div>
 
 <!-- Features Section -->
-<div class="container mx-auto px-4 py-16">
+<div class="container mx-auto px-4 py-16 font-open-sans">
   <!-- Section Header -->
   <div class="text-center mb-12">
     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

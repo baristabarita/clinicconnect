@@ -14,7 +14,6 @@ import { ReservationModalComponent } from '../reservation-modal/reservation-moda
     ReservationModalComponent
   ],
   templateUrl: './doctor-carousel.component.html',
-  styleUrls: ['./doctor-carousel.component.css']
 })
 
 export class DoctorCarouselComponent implements OnInit {

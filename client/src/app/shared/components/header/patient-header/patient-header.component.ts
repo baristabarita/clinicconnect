@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
@@ -14,13 +14,20 @@ export class PatientHeaderComponent implements OnInit {
   isProfileMenuOpen = false;
   userName = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private location: Location
+  ) {}
 
   ngOnInit() {
     const user = this.authService.getCurrentUser();
     if (user) {
       this.userName = `${user.fname || ''} ${user.lname || ''}`.trim();
     }
+  }
+
+  isActive(path: string): boolean {
+    return this.location.path().includes(path);
   }
 
   toggleProfileMenu() {

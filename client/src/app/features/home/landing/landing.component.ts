@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -10,8 +10,14 @@ import { RouterLink } from '@angular/router';
     RouterLink
   ],
   templateUrl: './landing.component.html',
-  // styleUrl: './landing.component.css'
 })
 export class LandingComponent {
+  isPatientLayout: boolean = false;
 
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    // Check if current URL includes '/patient' to determine the layout
+    this.isPatientLayout = this.router.url.includes('/patient');
+  }
 }

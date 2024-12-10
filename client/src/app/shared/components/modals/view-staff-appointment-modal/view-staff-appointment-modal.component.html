@@ -1,42 +1,75 @@
-<div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" (click)="close.emit()">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" (click)="$event.stopPropagation()">
-      <div class="mt-3">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Appointment Details</h3>
+<div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full transform transition-all">
+        <!-- Header -->
+        <div class="bg-[#90E0EF] rounded-t-lg p-4">
+            <h2 class="text-2xl font-bold text-center text-[#1D3557]">Staff Appointment Details</h2>
+        </div>
         
-        <div class="space-y-4">
-          <div>
-            <p class="text-sm font-medium text-gray-500">Patient Name</p>
-            <p class="text-base">{{appointment.userDetails?.fname}} {{appointment.userDetails?.lname}}</p>
-          </div>
+        <!-- Content -->
+        <div class="p-6">
+            <div class="space-y-4">
+                <div class="grid grid-cols-3 items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Appointment ID</span>
+                    <span class="col-span-2">{{appointment.aptID}}</span>
+                </div>
+                
+                <div class="grid grid-cols-3 items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Patient</span>
+                    <span class="col-span-2">{{appointment.userDetails?.fname}} {{appointment.userDetails?.lname}}</span>
+                </div>
 
-          <div>
-            <p class="text-sm font-medium text-gray-500">Appointment ID</p>
-            <p class="text-base">{{appointment.aptID}}</p>
-          </div>
+                <div class="grid grid-cols-3 items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Doctor</span>
+                    <span class="col-span-2">Dr. {{appointment.doctor?.fname}} {{appointment.doctor?.lname}}</span>
+                </div>
 
-          <div>
-            <p class="text-sm font-medium text-gray-500">Purpose</p>
-            <p class="text-base">{{appointment.purpose}}</p>
-          </div>
+                <div class="grid grid-cols-3 items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Purpose</span>
+                    <span class="col-span-2">{{appointment.purpose}}</span>
+                </div>
 
-          <div>
-            <p class="text-sm font-medium text-gray-500">Date</p>
-            <p class="text-base">{{appointment.visitDate | date:'medium'}}</p>
-          </div>
+                <div class="grid grid-cols-3 items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Date</span>
+                    <span class="col-span-2">{{appointment.visitDate | date}}</span>
+                </div>
 
-          <div>
-            <p class="text-sm font-medium text-gray-500">Status</p>
-            <p class="text-base">{{appointment.status}}</p>
-          </div>
+                <div class="grid grid-cols-3 items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Time</span>
+                    <span class="col-span-2">{{appointment.visitTime}}</span>
+                </div>
+
+                <div class="grid grid-cols-3 items-center">
+                    <span class="text-gray-600 font-medium">Status</span>
+                    <span class="col-span-2" [ngClass]="{
+                        'text-yellow-600 font-medium': appointment.status === 'SCHEDULED',
+                        'text-blue-600 font-medium': appointment.status === 'CONFIRMED',
+                        'text-green-600 font-medium': appointment.status === 'COMPLETED',
+                        'text-red-600 font-medium': appointment.status === 'CANCELED',
+                        'text-orange-600 font-medium': appointment.status === 'RESCHEDULED'
+                    }">
+                        {{appointment.status}}
+                    </span>
+                </div>
+            </div>
         </div>
 
-        <div class="mt-6">
-          <button
-            class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            (click)="close.emit()">
-            Close
-          </button>
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex justify-end space-x-3">
+            <!-- <button 
+                *ngIf="appointment.status === 'SCHEDULED'"
+                class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600">
+                Confirm
+            </button>
+            <button 
+                *ngIf="appointment.status === 'SCHEDULED' || appointment.status === 'CONFIRMED'"
+                class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600">
+                Cancel
+            </button> -->
+            <button 
+                (click)="close.emit()"
+                class="bg-[#1D3557] text-white px-6 py-2 rounded-lg hover:bg-[#2a4a7a] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3557]">
+                Close
+            </button>
         </div>
-      </div>
     </div>
-  </div>
+</div>
