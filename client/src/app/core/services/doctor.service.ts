@@ -35,4 +35,8 @@ export class DoctorService {
   deleteDoctorAvailability(doctorId: number, availabilityId: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${doctorId}/availability/${availabilityId}`);
   } 
+
+  setAvailability(availability: DoctorAvailability): Observable<any> {
+    return this.http.post(`${this.apiUrl}/availability`, availability);
+  }
 } 

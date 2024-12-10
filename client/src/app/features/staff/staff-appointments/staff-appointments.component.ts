@@ -19,6 +19,7 @@ import { forkJoin, of, catchError, map } from 'rxjs';
           ],
   templateUrl: './staff-appointments.component.html'
 })
+
 export class StaffAppointmentsComponent implements OnInit {
   appointments: AppointmentWithUser[] = [];
   filteredAppointments: AppointmentWithUser[] = [];
@@ -30,6 +31,9 @@ export class StaffAppointmentsComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
 
+  searchControl = new FormControl('');
+
+  //Filter Form 
   filterForm = new FormGroup({
     status: new FormControl(''),
     startDate: new FormControl(''),
@@ -43,6 +47,7 @@ export class StaffAppointmentsComponent implements OnInit {
 
   ngOnInit() {
     this.loadAppointments();
+    this.setupSearchSubscription();
   }
 
   loadAppointments() {
@@ -75,13 +80,42 @@ export class StaffAppointmentsComponent implements OnInit {
     this.filteredAppointments = [...this.appointments];
   }
 
+  //Search Methods
+  setupSearchSubscription() {
+    this.searchControl.valueChanges.subscribe(searchTerm => {
+      this.searchAppointments(searchTerm || '');
+    })
+  }
+
+  searchAppointments(searchTerm: string){
+    if(!searchTerm){
+      this.filteredAppointments = [...this.appointments];
+    }else{
+      searchTerm = searchTerm.toLowerCase();
+      this.filteredAppointments = this.appointments.filter(appointment => 
+        appointment.userDetails?.fname?.toLowerCase().includes(searchTerm) ||
+        appointment.userDetails?.lname?.toLowerCase().includes(searchTerm) ||
+        appointment.purpose?.toLowerCase().includes(searchTerm) ||
+        appointment.aptID?.toString().includes(searchTerm) ||
+        appointment.status?.toLowerCase().includes(searchTerm)
+      );
+    }
+  }
+
+  //Filter Methods  
   applyFilters() {
     const filters = this.filterForm.value;
+    const searchTerm = this.searchControl.value || '';
     
     // Start with the original list of appointments
     this.filteredAppointments = [...this.appointments];
     
-    // Apply filters if they exist
+    // Apply search filter first
+    if (searchTerm) {
+      this.searchAppointments(searchTerm);
+    }
+    
+    // Then apply other filters
     this.filteredAppointments = this.filteredAppointments.filter(appointment => {
       let matches = true;
       
