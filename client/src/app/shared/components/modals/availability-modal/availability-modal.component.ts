@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Doctor, DoctorAvailability } from '../../../models/types';
 import { DoctorService } from '../../../../core/services/doctor.service';
 
+type AvailabilityType = 'AVAILABLE' | 'ON_LEAVE' | 'PARTIALLY_AVAILABLE';
 @Component({
   selector: 'app-availability-modal',
   standalone: true,
@@ -20,23 +21,24 @@ export class AvailabilityModalComponent {
   availabilityForm: FormGroup;
   isLoading = false;
   error: string | null = null;
-
+  
   constructor(
     private fb: FormBuilder,
-    private doctorService: DoctorService
+    private doctorService: DoctorService 
   ) {
     this.availabilityForm = this.fb.group({
-      startDate: [null, Validators.required],
-      endDate: [null, Validators.required],
-      availabilityType: [null, Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      availabilityType: ['AVAILABLE', Validators.required],
+      notes: ['']
     });
   }
 
   ngOnChanges() {
     if (this.availability) {
       this.availabilityForm.patchValue({
-        startDate: this.availability.startDate,
-        endDate: this.availability.endDate,
+        startDate: this.formatDate(this.availability.startDate),
+        endDate: this.formatDate(this.availability.endDate),
         availabilityType: this.availability.availabilityType,
         notes: this.availability.notes
       });
@@ -47,33 +49,58 @@ export class AvailabilityModalComponent {
     }
   }
 
-  onSubmit() {
-    if (this.availabilityForm.valid) {
-      this.isLoading = true;
-      const availabilityData = {
-        ...this.availabilityForm.value,
-        doctorID: this.doctor?.doctorID
-      };
+  getCurrentDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
 
-      const request = this.availability 
-        ? this.doctorService.updateDoctorAvailability(
-            this.doctor?.doctorID!, 
-            this.availability.availabilityID!, 
-            availabilityData
-          )
-        : this.doctorService.addDoctorAvailability(
-            this.doctor?.doctorID!, 
-            availabilityData
-          );
-        request.subscribe({
-          next: () => {
-            this.isLoading = false;
-            this.saveAvailability.emit();
-            this.closeModal.emit();
-          },
-          error: (error) => {
-            this.error = error.error?.message || 'Failed to save availability';
-            this.isLoading = false;
+  setAvailabilityType(type: AvailabilityType): void {
+    this.availabilityForm.patchValue({ availabilityType: type });
+  }
+
+  getNotesPlaceholder(): string {
+    const type = this.availabilityForm.get('availabilityType')?.value;
+    switch (type) {
+      case 'ON_LEAVE':
+        return 'Please specify the reason for leave...';
+      case 'PARTIALLY_AVAILABLE':
+        return 'Please specify available hours or any restrictions...';
+      default:
+        return 'Add any additional notes about availability...';
+    }
+  }
+
+  private formatDate(date: Date | string): string {
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    return date;
+  }
+
+  onSubmit(): void {
+    if (this.availabilityForm.valid && this.doctor) {
+      this.isLoading = true;
+      const formData = this.availabilityForm.value;
+      
+      const availability: DoctorAvailability = {
+        ...(this.availability?.availabilityID && { availabilityID: this.availability.availabilityID! }),
+        doctorID: this.doctor.doctorID as number,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        availabilityType: formData.availabilityType,
+        notes: formData.notes,
+        doctor: this.doctor
+      };
+  
+      this.doctorService.addDoctorAvailability(this.doctor.doctorID as number, availability).subscribe({
+        next: (response) => {
+          this.saveAvailability.emit(availability);
+          this.closeModal.emit();
+        },
+        error: (error) => {
+          this.error = error.message;
+        },
+        complete: () => {
+          this.isLoading = false;
         }
       });
     }

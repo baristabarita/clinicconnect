@@ -1,71 +1,122 @@
-<div class="max-w-2xl mx-auto p-6">
-  <h2 class="text-2xl font-bold mb-6">Add New Doctor</h2>
-  
-  <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    <div class="grid grid-cols-3 gap-4">
-      <!-- First Name -->
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Add New Doctor</h2>
+      <p class="mt-2 text-gray-600">Enter the doctor's information to add them to the system.</p>
+    </div>
+    
+    <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="space-y-8">
+      <!-- Personal Information Section -->
       <div>
-        <label class="block text-sm font-medium text-gray-700">First Name</label>
-        <input
-          formControlName="fname"
-          type="text"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        >
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">Personal Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- First Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <input
+              formControlName="fname"
+              type="text"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              [ngClass]="{'border-red-500': doctorForm.get('fname')?.invalid && doctorForm.get('fname')?.touched}"
+            >
+            <p *ngIf="doctorForm.get('fname')?.invalid && doctorForm.get('fname')?.touched" 
+               class="mt-1 text-sm text-red-500">
+              First name is required
+            </p>
+          </div>
+
+          <!-- Middle Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+            <input
+              formControlName="mname"
+              type="text"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            >
+          </div>
+
+          <!-- Last Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+            <input
+              formControlName="lname"
+              type="text"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              [ngClass]="{'border-red-500': doctorForm.get('lname')?.invalid && doctorForm.get('lname')?.touched}"
+            >
+            <p *ngIf="doctorForm.get('lname')?.invalid && doctorForm.get('lname')?.touched" 
+               class="mt-1 text-sm text-red-500">
+              Last name is required
+            </p>
+          </div>
+        </div>
       </div>
 
-      <!-- Middle Name -->
+      <!-- Contact Information Section -->
       <div>
-        <label class="block text-sm font-medium text-gray-700">Middle Name</label>
-        <input
-          formControlName="mname"
-          type="text"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        >
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">Contact Information</h3>
+        <div class="space-y-6">
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <input
+              formControlName="email"
+              type="email"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              [ngClass]="{'border-red-500': doctorForm.get('email')?.invalid && doctorForm.get('email')?.touched}"
+            >
+            <p *ngIf="doctorForm.get('email')?.invalid && doctorForm.get('email')?.touched" 
+               class="mt-1 text-sm text-red-500">
+              Please enter a valid email address
+            </p>
+          </div>
+
+          <!-- Specialty -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Specialty</label>
+            <input
+              formControlName="specialty"
+              type="text"
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              [ngClass]="{'border-red-500': doctorForm.get('specialty')?.invalid && doctorForm.get('specialty')?.touched}"
+            >
+            <p *ngIf="doctorForm.get('specialty')?.invalid && doctorForm.get('specialty')?.touched" 
+               class="mt-1 text-sm text-red-500">
+              Specialty is required
+            </p>
+          </div>
+        </div>
       </div>
 
-      <!-- Last Name -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Last Name</label>
-        <input
-          formControlName="lname"
-          type="text"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        >
+      <!-- Error Message -->
+      <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">{{ error }}</p>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Email -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Email</label>
-      <input
-        formControlName="email"
-        type="email"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-      >
-    </div>
-
-    <!-- Specialty -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Specialty</label>
-      <input
-        formControlName="specialty"
-        type="text"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-      >
-    </div>
-
-    <!-- Error Message -->
-    <div *ngIf="error" class="text-red-500 text-sm">
-      {{ error }}
-    </div>
-
-    <!-- Submit Button -->
-    <button
-      type="submit"
-      [disabled]="!doctorForm.valid || isLoading"
-      class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-    >
-      {{ isLoading ? 'Adding...' : 'Add Doctor' }}
-    </button>
-  </form>
+      <!-- Submit Button -->
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          [disabled]="!doctorForm.valid || isLoading"
+          class="px-6 py-3 bg-[#10344F] text-white rounded-lg hover:bg-[#1a4b7c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[150px]"
+        >
+          <svg *ngIf="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ isLoading ? 'Adding...' : 'Add Doctor' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
