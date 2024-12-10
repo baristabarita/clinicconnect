@@ -1,10 +1,21 @@
-<h1>Analytics Dashboard</h1>
 <div class="max-w-4xl mx-auto bg-white shadow rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-gray-700 mb-4">Appointments Per Month</h1>
-    <canvas id="appointmentsChart"></canvas>
+    <h1 class="text-2xl font-bold text-gray-700 mb-4">Appointments Analytics</h1>
+
+    <!-- Appointments per Month Chart -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-600 mb-2">Appointments Per Month</h2>
+        <canvas id="appointmentsChart"></canvas>
+    </div>
+
+    <!-- Pending Appointments Chart -->
+    <div>
+        <h2 class="text-xl font-semibold text-gray-600 mb-2">Pending vs Completed Appointments</h2>
+        <canvas id="pendingAppointmentsChart"></canvas>
+    </div>
 </div>
+
 <script>
-    // Fetch data from the backend API
+    // Fetch data for appointments-per-month
     fetch('/api/appointments-per-month')
         .then(response => response.json())
         .then(data => {
@@ -32,6 +43,40 @@
                             beginAtZero: true
                         }
                     }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+    // Fetch data for pending-appointments
+    fetch('/api/pending-appointments')
+        .then(response => response.json())
+        .then(data => {
+            const labels = Object.keys(data); // e.g., ["Pending", "Completed"]
+            const counts = Object.values(data); // e.g., [20,150]
+
+            //Render Chart
+            const ctx = document.getElementById('pendingAppointmentsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pending vs Completed',
+                        data: counts,
+                        backgroundColor: [
+                            'rgba(255,99,132,0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
                 }
             });
         })
