@@ -2,6 +2,7 @@ package com.clinicconnect.api.repository;
 
 import com.clinicconnect.api.model.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -27,4 +28,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             LocalDate startDate,
             LocalDate endDate
     );
+
+    // Gets appointments per month
+    @Query("SELECT MONTHNAME(a.visitDate), COUNT(a) " +
+            "FROM Appointment a GROUP BY MONTH(a.visitDate) " +
+            "ORDER BY MONTH(a.visitDate)")
+    List<Object[]> findAppointmentsPerMonth();
+
+    // Gets appointment status
+    @Query("SELECT a.status, COUNT(a) " +
+            "FROM Appointment a " +
+            "GROUP BY a.status")
+    List<Object[]> findPendingAppointments();
 }

@@ -113,4 +113,12 @@ public class AuthResponse {
     public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
 }

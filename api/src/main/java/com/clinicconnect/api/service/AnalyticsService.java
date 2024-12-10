@@ -1,5 +1,9 @@
 package com.clinicconnect.api.service;
 
+import com.clinicconnect.api.repository.AppointmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,29 +11,35 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class AnalyticsService {
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    // Fetch number of appointments per month
     public Map<String, Integer> getAppointmentsPerMonth() {
         Map<String, Integer> data = new HashMap<>();
-        String url = "jdbc:mysql://localhost:3306/clinic_db";
-        String username = "root";
-        String password = "root";
+        var results = appointmentRepository.findAppointmentsPerMonth();
 
-        String query = "SELECT MONTHNAME(appointment_date) AS month, COUNT(*) AS count " +
-                "FROM appointment " +
-                "GROUP BY MONTH(appointment_date), MONTHNAME(appointment_date) " +
-                "ORDER BY MONTH(appointment_date);";
+        for (Object[] row : results) {
+            String month = (String) row[0];
+            Integer count = ((Number) row[1]).intValue();
+            data.put(month, count);
+        }
 
-        try (Connection conn = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = conn.prepareStatement(query);
-             ResultSet rs = statement.executeQuery()) {
+        return data;
+    }
 
-            while (rs.next()) {
-                String month = rs.getString("month");
-                int count = rs.getInt("count");
-                data.put(month, count);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    // Fetch pending appointments
+    public Map<String, Integer> getPendingAppointments() {
+        Map<String, Integer> data = new HashMap<>();
+        var results = appointmentRepository.findPendingAppointments();
+
+        for (Object[] row : results) {
+            String status = (String) row[0];
+            Integer count = ((Number) row[1]).intValue();
+            data.put(status, count);
         }
 
         return data;
