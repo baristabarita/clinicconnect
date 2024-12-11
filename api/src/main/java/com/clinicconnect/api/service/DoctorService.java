@@ -30,12 +30,20 @@ public class DoctorService {
         doctor.setEmail(doctorDTO.getEmail());
         doctor.setSpecialty(doctorDTO.getSpecialty());
         doctor.setStatus("AVAILABLE");
+        doctor.setProfile_image_path("https://imgur.com/QQTJIpn.jpg");
 
         return doctorRepository.save(doctor);
     }
 
+    public void deleteDoctor(Integer doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+        doctor.setIsDeleted(1);
+        doctorRepository.save(doctor);
+    }
+
     public List<Doctor> getAllDoctors() {
-        return doctorRepository.findAll();
+        return doctorRepository.findByIsDeleted(0);
     }
 
     public List<DoctorAvailability> getDoctorAvailability(Integer doctorId) {

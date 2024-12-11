@@ -10,7 +10,7 @@ public class DoctorDTO {
     private String email;
     private String specialty;
     private String status;
-    private String profileImagePath;
+    private String profile_image_path;
 
     public String getFname() {
         return fname;
@@ -60,11 +60,11 @@ public class DoctorDTO {
         this.status = status;
     }
 
-    public String getProfileImagePath() {
-        return profileImagePath;
+    public String getProfile_image_path() {
+        return profile_image_path;
     }
 
-    public void setProfileImagePath(String profileImagePath) {
-        this.profileImagePath = profileImagePath;
+    public void setProfile_image_path(String profile_image_path) {
+        this.profile_image_path = profile_image_path;
     }
 }
