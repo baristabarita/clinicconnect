@@ -66,7 +66,7 @@
             <div class="flex items-center">
               <div class="flex-shrink-0 h-10 w-10">
                 <img 
-                  [src]="doctor.profileImagePath || 'assets/images/default_pfp.jpg'" 
+                  [src]="doctor.profile_image_path || 'https://imgur.com/QQTJIpn.jpg'" 
                   alt="Doctor profile" 
                   class="h-10 w-10 rounded-full object-cover"
                 >
@@ -103,11 +103,12 @@
             >
               Manage Availability
             </button>
-            <!-- <button
+            <button
+              (click)="deleteDoctor(doctor)"
               class="bg-[#BC4749] hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition duration-200 shadow-custom"
             >
               Remove
-            </button> -->
+            </button>
           </td>
         </tr>
       </tbody>
@@ -123,6 +124,7 @@
     </div>
   </div>
 
+  <!-- Availability Modal -->
   <app-availability-modal
     *ngIf="showAvailabilityModal"
     [isOpen]="showAvailabilityModal"
@@ -131,4 +133,15 @@
     (closeModal)="showAvailabilityModal = false"
     (availabilityUpdated)="onAvailabilityUpdated()"
   ></app-availability-modal>
+
+  <!-- Delete Confirmation Modal -->
+  <app-delete-confirmation-modal
+  [isVisible]="showDeleteModal"
+  title="Confirm Doctor Removal"
+  [message]="'Are you sure you want to remove Dr. ' + (doctorToDelete?.fname || '') + ' ' + (doctorToDelete?.lname || '') + '?'"
+  confirmText="Remove"
+  cancelText="Cancel"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteModal()"
+></app-delete-confirmation-modal>
 </div>

@@ -6,6 +6,7 @@ import com.clinicconnect.api.model.Doctor;
 import com.clinicconnect.api.model.DoctorAvailability;
 import com.clinicconnect.api.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,20 @@ public class DoctorController {
                     .body(new ApiResponse<>(null, e.getMessage(), 400));
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteDoctor(@PathVariable Integer id) {
+        try {
+            doctorService.deleteDoctor(id);
+            return ResponseEntity.ok(new ApiResponse<>(null, "Doctor deleted successfully", 200));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(null, e.getMessage(), 404));
+        }
+    }
+
+
+    //Availability Related Mappings
 
     @GetMapping("/{doctorId}/availability")
     public ResponseEntity<ApiResponse<List<DoctorAvailability>>> getDoctorAvailability(@PathVariable Integer doctorId) {

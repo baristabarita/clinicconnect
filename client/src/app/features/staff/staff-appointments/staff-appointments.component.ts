@@ -21,6 +21,7 @@ import { forkJoin, of, catchError, map } from 'rxjs';
 })
 
 export class StaffAppointmentsComponent implements OnInit {
+  Math = Math;
   appointments: AppointmentWithUser[] = [];
   filteredAppointments: AppointmentWithUser[] = [];
   selectedAppointment: AppointmentWithUser | null = null;
@@ -28,6 +29,10 @@ export class StaffAppointmentsComponent implements OnInit {
   isViewModalOpen = false;
   isDeleteModalOpen = false;
   appointmentToDelete: AppointmentWithUser | null = null;
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 1;
+  paginatedAppointments: AppointmentWithUser[] = [];
   isLoading = false;
   error: string | null = null;
 
@@ -78,6 +83,7 @@ export class StaffAppointmentsComponent implements OnInit {
     } as AppointmentWithUser));
     
     this.filteredAppointments = [...this.appointments];
+    this.updatePagination();
   }
 
   //Search Methods
@@ -87,10 +93,10 @@ export class StaffAppointmentsComponent implements OnInit {
     })
   }
 
-  searchAppointments(searchTerm: string){
-    if(!searchTerm){
+  searchAppointments(searchTerm: string) {
+    if(!searchTerm) {
       this.filteredAppointments = [...this.appointments];
-    }else{
+    } else {
       searchTerm = searchTerm.toLowerCase();
       this.filteredAppointments = this.appointments.filter(appointment => 
         appointment.userDetails?.fname?.toLowerCase().includes(searchTerm) ||
@@ -100,6 +106,8 @@ export class StaffAppointmentsComponent implements OnInit {
         appointment.status?.toLowerCase().includes(searchTerm)
       );
     }
+    this.currentPage = 1; // Reset to first page when searching
+    this.updatePagination();
   }
 
   //Filter Methods  
@@ -138,9 +146,10 @@ export class StaffAppointmentsComponent implements OnInit {
         appointmentDate.setHours(23, 59, 59, 999);
         matches = matches && appointmentDate <= endDate;
       }
-      
       return matches;
     });
+    this.currentPage = 1;
+    this.updatePagination();
   }
 
   confirmDelete() {
@@ -158,6 +167,21 @@ export class StaffAppointmentsComponent implements OnInit {
         });
     }
   }
+
+  updatePagination() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = Math.min(startIndex + this.itemsPerPage, this.filteredAppointments.length);
+    this.paginatedAppointments = this.filteredAppointments.slice(startIndex, endIndex);
+    this.totalPages = Math.ceil(this.filteredAppointments.length / this.itemsPerPage);
+  }
+
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagination();
+    }
+  }
+
 
   // View Appointment Modal Methods
   viewAppointment(appointment: AppointmentWithUser) {

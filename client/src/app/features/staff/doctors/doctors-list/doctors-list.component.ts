@@ -5,11 +5,18 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { Doctor, DoctorAvailability } from '../../../../shared/models/types';
 import { AvailabilityModalComponent } from '../../../../shared/components/modals/availability-modal/availability-modal.component';
+import { DeleteConfirmationModalComponent } from '../../../../shared/components/modals/delete-confirmation-modal/delete-confirmation-modal.component';
 
 @Component({
   selector: 'app-doctors-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, AvailabilityModalComponent, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    RouterLink, 
+    AvailabilityModalComponent, 
+    DeleteConfirmationModalComponent,
+    ReactiveFormsModule
+  ],
   templateUrl: './doctors-list.component.html'
 })
 export class DoctorsListComponent implements OnInit {
@@ -17,6 +24,8 @@ export class DoctorsListComponent implements OnInit {
   allDoctors: Doctor[] = [];
   selectedDoctor: Doctor | null = null;
   showAvailabilityModal = false;
+  showDeleteModal = false;
+  doctorToDelete: Doctor | null = null;
   selectedAvailability: DoctorAvailability | undefined;
   availabilities: Record<number, DoctorAvailability[]> = {};
   isLoading = true;
@@ -46,6 +55,27 @@ export class DoctorsListComponent implements OnInit {
     });
   }
 
+  deleteDoctor(doctor: Doctor) {
+    this.doctorToDelete = doctor;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    if (this.doctorToDelete) {
+      this.doctorService.deleteDoctor(this.doctorToDelete.doctorID!).subscribe({
+        next: () => {
+          this.loadDoctors();
+          this.closeDeleteModal();
+        },
+        error: (error) => {
+          console.error('Error deleting doctor:', error);
+          // Handle error (could add error message display)
+        }
+      });
+    }
+  }
+
+  //Availability Related functions
   loadDoctorAvailability(doctorId: number) {
     this.doctorService.getDoctorAvailability(doctorId).subscribe({
       next: (response) => {
@@ -56,6 +86,7 @@ export class DoctorsListComponent implements OnInit {
       }
     });
   }
+
   
   openAvailabilityModal(doctor: Doctor, availability?: DoctorAvailability) {
     this.selectedDoctor = doctor;
@@ -88,5 +119,10 @@ export class DoctorsListComponent implements OnInit {
         doctor.specialty?.toLowerCase().includes(searchTerm)
       );
     }
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.doctorToDelete = null;
   }
 }

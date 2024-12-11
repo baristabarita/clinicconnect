@@ -20,6 +20,10 @@ export class DoctorService {
     return this.http.get<ApiResponse<Doctor[]>>(this.apiUrl);
   }
 
+  deleteDoctor(doctorId: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${doctorId}`);
+  }
+
   getDoctorAvailability(doctorId: number): Observable<ApiResponse<DoctorAvailability[]>> {
     return this.http.get<ApiResponse<DoctorAvailability[]>>(`${this.apiUrl}/${doctorId}/availability`);
   }

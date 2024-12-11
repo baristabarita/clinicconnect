@@ -98,8 +98,8 @@ export interface Doctor {
   email: string;
   specialty?: string;
   status: string;
-  profileImagePath?: string;
-  profileImageUpdatedAt?: Date;
+  profile_image_path?: string;
+  profile_image_update_aAt?: Date;
 }
 
 export interface DoctorAvailability {

@@ -30,10 +30,13 @@ public class Doctor {
     private String status;
 
     @Column(name = "profile_image_path", columnDefinition = "VARCHAR(255) DEFAULT 'https://imgur.com/QQTJIpn.jpg'")
-    private String profileImagePath;
+    private String profile_image_path;
 
     @Column(name = "profile_image_updated_at")
-    private LocalDateTime profileImageUpdatedAt;
+    private LocalDateTime profile_image_updated_at;
+
+    @Column(name = "is_deleted", columnDefinition = "TINYINT(1) DEFAULT 0")
+    private int isDeleted = 0;
 
     public Integer getDoctorID() {
         return doctorID;
@@ -91,19 +94,32 @@ public class Doctor {
         this.status = status;
     }
 
-    public String getProfileImagePath() {
-        return profileImagePath;
+    public String getProfile_image_path() {
+        return profile_image_path;
     }
 
-    public void setProfileImagePath(String profileImagePath) {
-        this.profileImagePath = profileImagePath;
+    public void setProfile_image_path(String profile_image_path) {
+        this.profile_image_path = profile_image_path;
     }
 
-    public LocalDateTime getProfileImageUpdatedAt() {
-        return profileImageUpdatedAt;
+    public LocalDateTime getProfile_image_updated_at() {
+        return profile_image_updated_at;
     }
 
-    public void setProfileImageUpdatedAt(LocalDateTime profileImageUpdatedAt) {
-        this.profileImageUpdatedAt = profileImageUpdatedAt;
+    public void setProfile_image_updated_at(LocalDateTime profile_image_updated_at) {
+        this.profile_image_updated_at = profile_image_updated_at;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    // Convenience methods to check deleted status
+    public boolean isDeleted() {
+        return isDeleted == 1;
     }
 }

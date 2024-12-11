@@ -21,7 +21,7 @@
         <!-- Doctor Info (if available) -->
         <div *ngIf="doctor" class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
           <img 
-            [src]="doctor.profileImagePath || 'assets/images/default-doctor.png'" 
+            [src]="doctor.profile_image_path || 'assets/images/default-doctor.png'" 
             alt="Doctor profile" 
             class="w-12 h-12 rounded-full object-cover"
           >
