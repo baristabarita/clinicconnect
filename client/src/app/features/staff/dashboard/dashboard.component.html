@@ -118,7 +118,8 @@
                                 'bg-yellow-100 text-yellow-800': appointment.status === 'SCHEDULED',
                                 'bg-blue-100 text-blue-800': appointment.status === 'CONFIRMED',
                                 'bg-green-100 text-green-800': appointment.status === 'COMPLETED',
-                                'bg-red-100 text-red-800': appointment.status === 'CANCELLED'
+                                'bg-red-100 text-red-800': appointment.status === 'CANCELLED',
+                                'bg-orange-100 text-orange-800': appointment.status === 'RESCHEDULED'
                             }" class="px-2 py-1 text-xs rounded-full">
                                 {{appointment.status}}
                             </span>
